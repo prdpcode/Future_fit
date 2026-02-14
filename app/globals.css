@@ -95,4 +95,27 @@ body {
     scrollbar-width: none;
     /* Firefox */
   }
+
+  /* 3D Fly-in Animation */
+  @keyframes fly-in-3d {
+    from {
+      transform: perspective(1000px) translate3d(0, 100px, -200px) rotateX(20deg);
+      opacity: 0;
+    }
+
+    to {
+      transform: perspective(1000px) translate3d(0, 0, 0) rotateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-on-scroll {
+    view-timeline-name: --reveal;
+    animation-name: fly-in-3d;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    /* scrolling is linear */
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
 }

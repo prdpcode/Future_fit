@@ -1,34 +1,40 @@
-import Link from "next/link";
+ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import ClientHero from "@/components/3d/ClientHero";
 
 export default function Home() {
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center bg-background text-foreground overflow-hidden relative">
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse delay-700" />
+      {/* 3D Background Layer */}
+      <div className="absolute inset-0 z-0">
+        <ClientHero />
       </div>
 
-      <main className="z-10 flex flex-col items-center gap-8 text-center px-4">
-        <h1 className="text-6xl md:text-9xl font-black tracking-tighter animate-in fade-in slide-in-from-bottom-4 duration-700">
-          FUTURE FIT
-        </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-          Weightless design for the next generation.
-          <br />
-          Customize your gear with AI-powered precision.
-        </p>
+      <main className="z-10 flex flex-col items-center gap-8 text-center px-4 pointer-events-none">
+        {/* Title is now part of the 3D scene overlay or can remain here if we want mixing */}
+        {/* We moved the big titlte to the 3D scene component for better layering, 
+            but let's keep the CTA and subtitle here as an overlay */}
 
-        <Link
-          href="/studio"
-          className="group mt-8 flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 animate-in fade-in zoom-in duration-1000 delay-500"
-        >
-          Enter Studio
-          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </Link>
+        <div className="mt-[40vh] space-y-8">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 bg-background/50 backdrop-blur-sm p-4 rounded-xl">
+            Weightless design for the next generation.
+            <br />
+            Customize your gear with AI-powered precision.
+          </p>
+
+          <div className="pointer-events-auto">
+            <Link
+              href="/shop"
+              className="group inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 animate-in fade-in zoom-in duration-1000 delay-500 shadow-xl"
+            >
+              Enter Shop
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
       </main>
 
-      <footer className="absolute bottom-8 text-sm text-muted-foreground">
+      <footer className="absolute bottom-8 text-sm text-muted-foreground z-10">
         © 2026 Future Fit AI Studio
       </footer>
     </div>
