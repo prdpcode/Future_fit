@@ -2,7 +2,7 @@
 
 import { useCart } from "./CartContext";
 import { X, ShoppingBag } from "lucide-react";
-import { cn, formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,6 +49,9 @@ export default function CartSidebar() {
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div>
                                         <h4 className="font-medium line-clamp-1">{item.name}</h4>
+                                        {item.size ? (
+                                            <div className="text-xs text-muted-foreground">Size: {item.size}</div>
+                                        ) : null}
                                         {item.customized && <span className="text-xs text-blue-500 font-medium">Customized</span>}
                                     </div>
                                     <div className="flex items-center justify-between mt-2">

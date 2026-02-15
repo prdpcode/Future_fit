@@ -13,13 +13,16 @@ export default function PropertiesPanel() {
 
     if (!activeObject || activeObject.type !== 'image') return null;
 
-    const handleAction = async (action: string, fn: (fd: FormData, ...args: any[]) => Promise<string>, ...args: any[]) => {
+    const handleAction = async <TArgs extends unknown[]>(
+        action: string,
+        fn: (fd: FormData, ...args: TArgs) => Promise<string>,
+        ...args: TArgs
+    ) => {
         if (processing) return;
         setProcessing(action);
 
         try {
             // Retrieve image source
-            // @ts-ignore
             const imgObj = activeObject as fabric.Image;
             const src = imgObj.getSrc();
 
@@ -36,15 +39,21 @@ export default function PropertiesPanel() {
             // In v6+ it's setSrc(url).then(...)
             // Let's try to support both or assume v6 based on package.json
 
-            // @ts-ignore
-            if (imgObj.setSrc.length === 1) { // Promise based (likely)
-                // @ts-ignore
-                await imgObj.setSrc(newBase64);
-            } else {
+            const maybeImg = imgObj as unknown as {
+                setSrc?: ((src: string) => Promise<void>) | ((src: string, callback: () => void) => void);
+            };
+
+            if (typeof maybeImg.setSrc === "function" && maybeImg.setSrc.length === 1) {
+                await (maybeImg.setSrc as (src: string) => Promise<void>)(newBase64);
+            } else if (typeof maybeImg.setSrc === "function") {
                 await new Promise<void>((resolve) => {
-                    // @ts-ignore
-                    imgObj.setSrc(newBase64, () => resolve());
+                    (maybeImg.setSrc as (src: string, callback: () => void) => void)(
+                        newBase64,
+                        () => resolve(),
+                    );
                 });
+            } else {
+                throw new Error("setSrc not available on fabric.Image");
             }
 
             canvas?.requestRenderAll();
@@ -84,7 +93,7 @@ export default function PropertiesPanel() {
                 </button>
 
                 <button
-                    onClick={() => handleAction('style', applyStyle, 'cyber-minimalist')}
+                    onClick={() => handleAction<[string]>('style', applyStyle, 'cyber-minimalist')}
                     disabled={!!processing}
                     className={cn(
                         "flex items-center gap-2 p-2 rounded-md transition-colors bg-secondary hover:bg-white text-sm",

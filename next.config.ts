@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "@supabase/supabase-js",
+      "@react-three/drei",
+      "@react-three/fiber",
+      "three",
+    ],
+  },
 };
 
 export default nextConfig;

@@ -1,6 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
+
+export const metadata: Metadata = {
+    title: "Shop All — Streetwear, Hoodies, Tees & Accessories",
+    description:
+        "Browse the full Future Fit collection. Heavyweight tees, oversized hoodies, tech joggers, bomber jackets & more. AI-designed streetwear with free shipping.",
+    openGraph: {
+        title: "Shop All — Future Fit Collection",
+        description: "Browse heavyweight tees, oversized hoodies, tech joggers & more.",
+    },
+};
 
 const PRODUCTS = [
     {

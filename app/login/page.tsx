@@ -3,18 +3,39 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         setLoading(true);
-        // Mock login
-        setTimeout(() => {
+        try {
+            const supabase = createSupabaseBrowserClient();
+            if (!supabase) {
+                setError("Auth is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local and restart the dev server.");
+                return;
+            }
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            if (signInError) {
+                setError(signInError.message);
+                return;
+            }
             router.push("/");
-        }, 1000);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Failed to sign in");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -30,6 +51,8 @@ export default function LoginPage() {
                         <input
                             type="email"
                             placeholder="Email address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground"
                             required
                         />
@@ -38,10 +61,19 @@ export default function LoginPage() {
                         <input
                             type="password"
                             placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground"
                             required
                         />
                     </div>
+
+                    {error ? (
+                        <div className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+                            {error}
+                        </div>
+                    ) : null}
+
                     <button
                         disabled={loading}
                         className="w-full py-3 bg-foreground text-background font-bold rounded-md hover:opacity-90 transition-opacity disabled:opacity-50"
@@ -60,7 +92,7 @@ export default function LoginPage() {
                         Continue as Guest
                     </Link>
                     <p className="text-center text-sm text-muted-foreground">
-                        Don't have an account? <Link href="/register" className="text-foreground font-bold hover:underline">Sign up</Link>
+                        Don&apos;t have an account? <Link href="/register" className="text-foreground font-bold hover:underline">Sign up</Link>
                     </p>
                 </div>
             </div>

@@ -1,4 +1,15 @@
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Careers — Join the Future of Fashion Tech",
+    description:
+        "Join Future Fit and build the next generation of AI-powered fashion. Open positions in engineering, design, and marketing.",
+    openGraph: {
+        title: "Careers — Future Fit",
+        description: "Build the next generation of AI-powered fashion with us.",
+    },
+};
 
 const POSITIONS = [
     { title: "Senior AI Engineer", department: "Engineering", location: "Remote" },
@@ -12,7 +23,7 @@ export default function CareersPage() {
             <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter">JOIN THE FUTURE</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                    We're building the next generation of fashion technology.
+                    We&apos;re building the next generation of fashion technology.
                     Help us bridge the gap between AI and apparel.
                 </p>
             </div>

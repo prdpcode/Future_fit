@@ -1,5 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+    title: "Collections — Curated Streetwear Drops",
+    description:
+        "Explore curated Future Fit collections. Summer 2026, Core Essentials, Cyber Punk, Tech Fleece & more. Limited edition streetwear drops.",
+    openGraph: {
+        title: "Collections — Future Fit",
+        description: "Explore curated streetwear collections and limited edition drops.",
+    },
+};
 
 
 

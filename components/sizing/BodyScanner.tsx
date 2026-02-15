@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Camera, ScanLine, Ruler, CheckCircle2, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { X, Camera, ScanLine, CheckCircle2, Loader2 } from "lucide-react";
 
 interface BodyScannerProps {
     isOpen: boolean;
@@ -14,20 +13,11 @@ interface BodyScannerProps {
 
 type ScanState = "permission" | "ready" | "scanning" | "processing" | "result";
 
-export default function BodyScanner({ isOpen, onClose, onComplete }: BodyScannerProps) {
+function BodyScannerInner({ onClose, onComplete }: Omit<BodyScannerProps, "isOpen">) {
     const [scanState, setScanState] = useState<ScanState>("permission");
     const [progress, setProgress] = useState(0);
     const [recommendedSize, setRecommendedSize] = useState<string | null>(null);
     const webcamRef = useRef<Webcam>(null);
-
-    // Reset state when opening
-    useEffect(() => {
-        if (isOpen) {
-            setScanState("permission");
-            setProgress(0);
-            setRecommendedSize(null);
-        }
-    }, [isOpen]);
 
     const handleUserMedia = useCallback(() => {
         setTimeout(() => setScanState("ready"), 500);
@@ -55,8 +45,6 @@ export default function BodyScanner({ isOpen, onClose, onComplete }: BodyScanner
             }
         }, 50);
     }, []);
-
-    if (!isOpen) return null;
 
     return (
         <AnimatePresence>
@@ -194,4 +182,9 @@ export default function BodyScanner({ isOpen, onClose, onComplete }: BodyScanner
             </motion.div>
         </AnimatePresence>
     );
+}
+
+export default function BodyScanner({ isOpen, onClose, onComplete }: BodyScannerProps) {
+    if (!isOpen) return null;
+    return <BodyScannerInner onClose={onClose} onComplete={onComplete} />;
 }

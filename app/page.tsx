@@ -1,10 +1,24 @@
- import Link from "next/link";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ClientHero from "@/components/3d/ClientHero";
+
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Future Fit",
+  url: "https://wearfuturefit.com",
+  logo: "https://wearfuturefit.com/og-image.png",
+  description: "AI-powered streetwear and custom apparel brand.",
+  sameAs: [],
+};
 
 export default function Home() {
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center bg-background text-foreground overflow-hidden relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+      />
       {/* 3D Background Layer */}
       <div className="absolute inset-0 z-0">
         <ClientHero />

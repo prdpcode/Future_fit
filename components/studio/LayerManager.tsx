@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 export default function LayerManager() {
     const { canvas, activeObject } = useCanvas();
     const [layers, setLayers] = useState<fabric.Object[]>([]);
-    const [_, setTick] = useState(0);
 
     useEffect(() => {
         if (!canvas) return;
@@ -41,7 +40,6 @@ export default function LayerManager() {
         canvas.bringObjectForward(obj);
         canvas.requestRenderAll();
         setLayers([...canvas.getObjects()].reverse());
-        setTick(t => t + 1);
     };
 
     const moveDown = (e: React.MouseEvent, obj: fabric.Object) => {
@@ -51,7 +49,6 @@ export default function LayerManager() {
         canvas.sendObjectBackwards(obj);
         canvas.requestRenderAll();
         setLayers([...canvas.getObjects()].reverse());
-        setTick(t => t + 1);
     };
 
     const deleteObject = (e: React.MouseEvent, obj: fabric.Object) => {
@@ -82,8 +79,9 @@ export default function LayerManager() {
                         // Determine a label
                         let typeLabel = obj.type;
                         if (obj.type === 'i-text' || obj.type === 'text') {
-                            // @ts-ignore - text exists on IText
-                            typeLabel = `"${obj.text?.substring(0, 10)}${obj.text?.length > 10 ? '...' : ''}"`;
+                            // @ts-expect-error - Fabric types do not expose `text` on base Object
+                            const preview = (obj.text as string | undefined) ?? "";
+                            typeLabel = `"${preview.substring(0, 10)}${preview.length > 10 ? '...' : ''}"`;
                         } else if (obj.type === 'image') {
                             typeLabel = "Image";
                         }
@@ -92,7 +90,7 @@ export default function LayerManager() {
                             <div
                                 key={index}
                                 className={cn(
-                                    "flex items-center justify-between p-2 rounded-md text-sm cursor-pointer border border-transparent transition-all",
+                                    "group flex items-center justify-between p-2 rounded-md text-sm cursor-pointer border border-transparent transition-all",
                                     activeObject === obj
                                         ? "bg-accent text-accent-foreground border-border shadow-sm"
                                         : "hover:bg-muted text-muted-foreground hover:text-foreground"

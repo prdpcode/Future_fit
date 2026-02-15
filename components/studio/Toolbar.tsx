@@ -2,7 +2,7 @@
 
 import { useCanvas } from "./CanvasContext";
 import * as fabric from "fabric";
-import { Type, Square, Hexagon, Circle, Image } from "lucide-react";
+import { Type, Square, Circle, Image as ImageIcon } from "lucide-react";
 
 export default function Toolbar() {
     const { canvas } = useCanvas();
@@ -58,8 +58,15 @@ export default function Toolbar() {
         reader.onload = async (f) => {
             const data = f.target?.result as string;
             try {
-                // @ts-ignore
-                const img = await fabric.FabricImage.fromURL(data);
+                const maybeFabric = fabric as unknown as {
+                    FabricImage?: { fromURL?: (url: string) => Promise<fabric.Image> };
+                };
+
+                if (typeof maybeFabric.FabricImage?.fromURL !== "function") {
+                    throw new Error("FabricImage.fromURL not available");
+                }
+
+                const img = await maybeFabric.FabricImage.fromURL(data);
                 img.set({
                     left: 100,
                     top: 100,
@@ -68,9 +75,13 @@ export default function Toolbar() {
                 canvas.add(img);
                 canvas.setActiveObject(img);
                 canvas.requestRenderAll();
-            } catch (err) {
-                // @ts-ignore
-                fabric.Image.fromURL(data, (img: fabric.Image) => {
+            } catch {
+                const fromURL = (fabric.Image.fromURL as unknown as (
+                    url: string,
+                    callback: (img: fabric.Image) => void,
+                ) => void);
+
+                fromURL(data, (img) => {
                     img.set({
                         left: 100,
                         top: 100,
@@ -114,7 +125,7 @@ export default function Toolbar() {
                 className="w-10 h-10 flex items-center justify-center rounded-xl bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm cursor-pointer"
                 title="Upload Image"
             >
-                <Image size={20} />
+                <ImageIcon size={20} />
                 <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
             </label>
         </div>

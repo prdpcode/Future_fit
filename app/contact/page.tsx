@@ -1,10 +1,22 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Contact Us — Customer Support & Partnerships",
+    description:
+        "Get in touch with Future Fit. Customer support, press inquiries, and partnership opportunities. Visit our HQ in San Francisco.",
+    openGraph: {
+        title: "Contact Us — Future Fit",
+        description: "Get in touch with Future Fit for support or partnerships.",
+    },
+};
+
 export default function ContactPage() {
     return (
         <div className="container mx-auto px-4 py-16 max-w-2xl">
             <h1 className="text-4xl font-black mb-8 tracking-tighter text-center">CONTACT US</h1>
             <div className="space-y-8 text-center">
                 <p className="text-xl text-muted-foreground">
-                    Have questions about your order or our AI tools? We're here to help.
+                    Have questions about your order or our AI tools? We&apos;re here to help.
                 </p>
 
                 <div className="grid gap-4 md:grid-cols-2 text-left bg-secondary p-8 rounded-lg">

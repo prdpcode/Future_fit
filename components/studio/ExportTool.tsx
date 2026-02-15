@@ -4,12 +4,10 @@ import { useCanvas } from "./CanvasContext";
 import { Download, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
-import { useRouter } from "next/navigation";
 
 export default function ExportTool() {
     const { canvas } = useCanvas();
     const { addItem } = useCart();
-    const router = useRouter();
     const [isExporting, setIsExporting] = useState(false);
 
     const handleExport = (action: 'download' | 'cart') => {
