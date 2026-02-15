@@ -1,23 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-
-const orgJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Future Fit",
-  url: "https://wearfuturefit.com",
-  logo: "https://wearfuturefit.com/opengraph-image",
-  description: "AI-powered streetwear and custom apparel brand.",
-  sameAs: [],
-};
+import JSONLD from "@/components/JSONLD";
 
 export default function Home() {
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center bg-background text-foreground relative overflow-hidden">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
-      />
+      <JSONLD />
 
       {/* Ambient glow orbs */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-foreground/[0.03] rounded-full blur-[120px] animate-glow pointer-events-none" />

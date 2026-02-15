@@ -13,6 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${SITE_URL}/studio`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
         { url: `${SITE_URL}/careers`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
         { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+        { url: `${SITE_URL}/fit-finder`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+        { url: `${SITE_URL}/privacy`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
+        { url: `${SITE_URL}/refund-policy`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
+        { url: `${SITE_URL}/terms`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
         { url: `${SITE_URL}/login`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
         { url: `${SITE_URL}/register`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
     ];

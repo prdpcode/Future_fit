@@ -20,21 +20,21 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wearfuturefit.com"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Future Fit | AI-Powered Streetwear",
+    default: "Future Fit | AI-Powered Streetwear & Futuristic Fashion",
     template: "%s | Future Fit",
   },
   description:
-    "Premium, futuristic apparel designed for the digital age. AI-powered streetwear with virtual fitting, custom studio, and free shipping across India.",
+    "Discover Future Fit, India's premier AI-driven streetwear brand. Shop our collections of oversized tees, hoodies, and tech-fleece apparel designed with AI precision.",
   keywords: [
     "Future Fit",
+    "AI Streetwear",
+    "Futuristic Fashion India",
+    "Oversized T-shirts",
+    "Tech Noir Apparel",
     "AI fashion",
     "streetwear India",
-    "custom clothing",
-    "virtual fitting room",
     "oversized hoodie",
-    "heavyweight tee",
     "online clothing store",
-    "futuristic fashion",
   ],
   authors: [{ name: "Future Fit", url: SITE_URL }],
   creator: "Future Fit AI Studio",
@@ -43,15 +43,15 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: SITE_URL,
     siteName: "Future Fit",
-    title: "Future Fit | AI-Powered Streetwear",
+    title: "Future Fit | AI-Powered Streetwear & Futuristic Fashion",
     description:
-      "Next-gen streetwear designed with AI. Virtual fitting, custom studio, premium quality.",
+      "Discover Future Fit, India's premier AI-driven streetwear brand. Oversized tees, hoodies, and tech-fleece apparel.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Fit | AI-Powered Streetwear",
+    title: "Future Fit | AI-Powered Streetwear & Futuristic Fashion",
     description:
-      "Premium, futuristic apparel designed for the digital age.",
+      "Discover Future Fit, India's premier AI-driven streetwear brand. Shop oversized tees, hoodies & tech-fleece apparel.",
   },
   robots: {
     index: true,

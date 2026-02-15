@@ -14,9 +14,9 @@ export const metadata: Metadata = {
 
 export default function CollectionsPage() {
     const collections = [
-        { id: 1, name: "Oversized Tees", tag: "Drop Shoulder. Box Fit. Statement.", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop" },
-        { id: 2, name: "Round Neck Tees", tag: "Classic Cut. Premium Cotton. Everyday.", image: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=800&auto=format&fit=crop" },
-        { id: 3, name: "Hoodies", tag: "Heavyweight. Cozy. Streetwear Essential.", image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=800&auto=format&fit=crop" },
+        { id: 1, name: "Oversized Tees", tag: "Drop Shoulder. Box Fit. Statement.", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop", alt: "Future Fit Oversized Tees Collection - AI Designed Drop Shoulder Streetwear" },
+        { id: 2, name: "Round Neck Tees", tag: "Classic Cut. Premium Cotton. Everyday.", image: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=800&auto=format&fit=crop", alt: "Future Fit Round Neck Tees Collection - Premium Cotton AI Streetwear" },
+        { id: 3, name: "Hoodies", tag: "Heavyweight. Cozy. Streetwear Essential.", image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=800&auto=format&fit=crop", alt: "Future Fit Hoodies Collection - Heavyweight AI Designed Streetwear Essentials" },
     ];
 
     return (
@@ -36,7 +36,7 @@ export default function CollectionsPage() {
                         >
                             <Image
                                 src={collection.image}
-                                alt={collection.name}
+                                alt={collection.alt}
                                 fill
                                 sizes="(max-width: 768px) 100vw, 33vw"
                                 priority
