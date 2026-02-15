@@ -33,12 +33,22 @@ export default function ContactPage() {
                         <a href="mailto:wearfuturefit@gmail.com" className="text-foreground hover:underline">wearfuturefit@gmail.com</a>
                     </div>
                     <div>
-                        <h3 className="font-bold mb-2">Location</h3>
-                        <p className="text-muted-foreground">India</p>
+                        <h3 className="font-bold mb-2">Support Hours</h3>
+                        <p className="text-muted-foreground">Mon – Fri, 10 AM – 6 PM IST</p>
                     </div>
                 </div>
 
-                <div className="pt-8 border-t border-border text-sm text-muted-foreground">
+                <div className="bg-secondary p-8 rounded-lg text-left">
+                    <h3 className="font-bold mb-2">Business Address</h3>
+                    <p className="text-muted-foreground">
+                        17/3, Kanayakumari Nilaya, 1st Floor,<br />
+                        2nd Cross Road, Nagarbhavi Stage 2,<br />
+                        Bengaluru, Bengaluru Urban,<br />
+                        Karnataka – 560056, India
+                    </p>
+                </div>
+
+                <div className="pt-4 text-sm text-muted-foreground">
                     <p>We typically respond within 24 hours.</p>
                 </div>
             </div>
