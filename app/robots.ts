@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wearfuturefit.com";
+const baseUrl = "https://wearfuturefit.com";
 
 export default function robots(): MetadataRoute.Robots {
     return {
@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ["/api/", "/logout", "/checkout"],
             },
         ],
-        sitemap: `${SITE_URL}/sitemap.xml`,
+        sitemap: `${baseUrl}/sitemap.xml`,
     };
 }
