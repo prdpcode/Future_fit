@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Contact Us — Customer Support & Partnerships",
     description:
-        "Get in touch with Future Fit. Customer support, press inquiries, and partnership opportunities. Visit our HQ in San Francisco.",
+        "Get in touch with Future Fit. Customer support, press inquiries, and partnership opportunities.",
     openGraph: {
         title: "Contact Us — Future Fit",
         description: "Get in touch with Future Fit for support or partnerships.",

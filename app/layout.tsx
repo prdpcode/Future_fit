@@ -20,11 +20,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wearfuturefit.com"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Future Fit — AI-Powered Streetwear & Custom Apparel",
+    default: "Future Fit | AI-Powered Streetwear",
     template: "%s | Future Fit",
   },
   description:
-    "Discover next-gen streetwear designed with AI precision. Virtual fitting room, custom studio, heavyweight hoodies, oversized tees & more. Free shipping across India.",
+    "Premium, futuristic apparel designed for the digital age. AI-powered streetwear with virtual fitting, custom studio, and free shipping across India.",
   keywords: [
     "Future Fit",
     "AI fashion",
@@ -43,15 +43,15 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: SITE_URL,
     siteName: "Future Fit",
-    title: "Future Fit — AI-Powered Streetwear & Custom Apparel",
+    title: "Future Fit | AI-Powered Streetwear",
     description:
       "Next-gen streetwear designed with AI. Virtual fitting, custom studio, premium quality.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Fit — AI-Powered Streetwear",
+    title: "Future Fit | AI-Powered Streetwear",
     description:
-      "Next-gen streetwear designed with AI. Virtual fitting, custom studio, premium quality.",
+      "Premium, futuristic apparel designed for the digital age.",
   },
   robots: {
     index: true,

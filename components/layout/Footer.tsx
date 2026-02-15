@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock, Instagram, Twitter } from "lucide-react";
 
 export default function Footer() {
     return (
@@ -67,6 +67,14 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
                         <p>&copy; {new Date().getFullYear()} Future Fit. All rights reserved.</p>
+                        <div className="flex items-center gap-4">
+                            <a href="https://instagram.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Instagram">
+                                <Instagram size={16} />
+                            </a>
+                            <a href="https://twitter.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Twitter">
+                                <Twitter size={16} />
+                            </a>
+                        </div>
                         <p>GSTIN: 29ANDPH4834K1ZR | Legal Entity: Future Fit</p>
                     </div>
                 </div>
