@@ -5,6 +5,7 @@ import Image from "next/image";
 import { CheckCircle, ShoppingBag, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useCart } from "@/components/cart/CartContext";
 import { formatCurrency } from "@/lib/utils";
+import { updateStockAfterPurchase } from "@/lib/actions/inventory";
 import { useState, useMemo } from "react";
 
 declare global {
@@ -113,7 +114,23 @@ export default function CheckoutPage() {
                         const verifyData = await verifyRes.json();
                         if (verifyData.verified) {
                             setPaymentId(verifyData.paymentId);
-                            setState("success");
+                            
+                            // Decrement stock for each purchased item
+                            for (const item of items) {
+                                const slug = item.id.replace(/^.*:/, ""); // Remove any prefix if present
+                                await updateStockAfterPurchase(slug, 1);
+                            }
+                            
+                            // Store order details for PartnerStack tracking
+                            if (typeof window !== "undefined") {
+                                sessionStorage.setItem("future_fit_order", JSON.stringify({
+                                    paymentId: verifyData.paymentId,
+                                    total,
+                                    email,
+                                    items,
+                                }));
+                            }
+                            
                             // Send order notification
                             fetch("/api/notify/order", {
                                 method: "POST",
@@ -124,6 +141,9 @@ export default function CheckoutPage() {
                                     address: `${address}, ${city} - ${pincode}`,
                                 }),
                             }).catch(() => {});
+                            
+                            // Redirect to success page
+                            window.location.href = `/checkout/success?payment_id=${verifyData.paymentId}&amount=${total}&email=${encodeURIComponent(email)}`;
                         } else {
                             setError("Payment verification failed. Contact support if amount was deducted.");
                             setState("error");
