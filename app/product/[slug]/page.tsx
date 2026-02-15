@@ -63,23 +63,26 @@ export default async function ProductPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <div className="flex items-center min-h-[calc(100vh-4rem)]">
-            <div className="container mx-auto px-4 py-4 lg:py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="container mx-auto px-4 py-8 lg:py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                     {/* Gallery */}
-                    <ProductGallery
-                        image={product.image}
-                        name={product.name}
-                        model={product.model}
-                    />
+                    <div className="animate-fade-up">
+                        <ProductGallery
+                            image={product.image}
+                            name={product.name}
+                            model={product.model}
+                        />
+                    </div>
 
                     {/* Info */}
-                    <div className="flex flex-col justify-start space-y-8 pt-4 lg:pt-0">
+                    <div className="flex flex-col justify-start space-y-6 pt-4 lg:pt-0 animate-fade-up" style={{ animationDelay: "150ms" }}>
                         <div>
-                            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter mb-2">{product.name}</h1>
+                            <p className="text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground mb-3">Future Fit</p>
+                            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter mb-3">{product.name}</h1>
                             <p className="text-2xl font-bold">{formatCurrency(product.price)}</p>
                         </div>
 
-                        <p className="text-muted-foreground leading-relaxed text-lg">
+                        <p className="text-muted-foreground leading-relaxed text-base lg:text-lg">
                             {product.description}
                         </p>
 

@@ -3,8 +3,8 @@ import { Mail, MapPin, Clock, Instagram, Twitter } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="border-t border-border bg-background">
-            <div className="container mx-auto px-4 py-12 md:px-8">
+        <footer className="border-t border-border/50 bg-background">
+            <div className="container mx-auto px-4 py-14 md:px-8">
                 <div className="grid gap-8 md:grid-cols-4">
                     <div>
                         <Link href="/" className="font-black text-xl tracking-tighter">F\F</Link>

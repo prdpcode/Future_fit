@@ -60,7 +60,7 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border h-16 flex items-center px-4 md:px-8 justify-between">
+            <nav className="fixed top-0 left-0 right-0 z-40 bg-background/60 backdrop-blur-xl border-b border-border/50 h-16 flex items-center px-4 md:px-8 justify-between transition-all duration-300">
                 <div className="flex items-center gap-4 md:gap-8 min-w-0">
                     <Link href="/" className="font-black text-lg sm:text-xl tracking-tighter shrink-0">
                         F\F

@@ -32,12 +32,20 @@ const PRODUCTS = [
 export default function ShopPage() {
     return (
         <div>
-            <div className="container mx-auto px-4 pt-12 pb-8">
-                <h1 className="text-4xl font-black mb-8 tracking-tighter">COLLECTION 01</h1>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="container mx-auto px-4 pt-12 pb-12">
+                <div className="mb-10">
+                    <p className="text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground mb-2">The Collection</p>
+                    <h1 className="text-4xl md:text-5xl font-black tracking-tighter">COLLECTION 01</h1>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                     {PRODUCTS.map((product, index) => (
-                        <Link href={`/product/${product.slug}`} key={product.id} className="group animate-on-scroll">
-                            <div className="aspect-[3/4] relative bg-secondary rounded-lg overflow-hidden mb-2">
+                        <Link
+                            href={`/product/${product.slug}`}
+                            key={product.id}
+                            className="group animate-fade-up"
+                            style={{ animationDelay: `${index * 80}ms` }}
+                        >
+                            <div className="aspect-[3/4] relative bg-secondary rounded-xl overflow-hidden mb-3 shadow-soft group-hover:shadow-soft-lg transition-all duration-500 group-hover:-translate-y-1">
                                 <Image
                                     src={product.image}
                                     alt={product.name}
@@ -45,16 +53,16 @@ export default function ShopPage() {
                                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                     priority={index < 4}
                                     loading={index < 4 ? undefined : "lazy"}
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </div>
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h3 className="font-bold text-lg">{product.name}</h3>
-                                    <p className="text-muted-foreground text-sm">Future Fit Standard</p>
+                            <div className="flex justify-between items-start gap-2">
+                                <div className="min-w-0">
+                                    <h3 className="font-bold text-sm md:text-base leading-tight truncate">{product.name}</h3>
+                                    <p className="text-muted-foreground text-xs mt-0.5">{product.category}</p>
                                 </div>
-                                <span className="font-semibold">{formatCurrency(product.price)}</span>
+                                <span className="font-bold text-sm shrink-0">{formatCurrency(product.price)}</span>
                             </div>
                         </Link>
                     ))}
