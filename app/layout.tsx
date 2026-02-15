@@ -97,10 +97,6 @@ export default function RootLayout({
             (a[e].q=a[e].q||[]).push(arguments)},a[e].l=1*new Date();f=b.createElement(c),
             g=b.getElementsByTagName(c)[0];f.async=1;f.src=d;g.parentNode.insertBefore(f,g)
             })(window,document,'script','https://cdn.growsumo.com/assets/v3/growsumo.js','growsumo');
-            growsumo.init({
-              customer_key: 'pk_YOUR_CUSTOMER_KEY',
-              application_key: 'sk_YOUR_APPLICATION_KEY'
-            });
           `,
         }}
       />
