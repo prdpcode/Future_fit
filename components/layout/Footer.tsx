@@ -5,8 +5,8 @@ export default function Footer() {
     return (
         <footer className="border-t border-border/50 bg-background">
             <div className="container mx-auto px-4 py-14 md:px-8">
-                <div className="grid gap-8 md:grid-cols-4">
-                    <div>
+                <div className="grid gap-8 md:grid-cols-5">
+                    <div className="md:col-span-2">
                         <Link href="/" className="font-black text-xl tracking-tighter">F\F</Link>
                         <p className="mt-3 text-sm text-muted-foreground">Wear the future.</p>
                         <div className="mt-4 space-y-2 text-xs text-muted-foreground">
@@ -44,8 +44,9 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="font-bold text-sm mb-3">Legal</h4>
+                        <h4 className="font-bold text-sm mb-3">Growth</h4>
                         <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/affiliates" className="hover:text-foreground transition-colors">Affiliates</Link></li>
                             <li><Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
                             <li><Link href="/refund-policy" className="hover:text-foreground transition-colors">Refund &amp; Cancellation</Link></li>
                             <li><Link href="/terms" className="hover:text-foreground transition-colors">Terms &amp; Conditions</Link></li>

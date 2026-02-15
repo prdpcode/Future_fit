@@ -93,22 +93,13 @@ export default function RootLayout({
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-            },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-            twq('config','o8k2j');
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-K8X9Q3L');
             (function(a,b,c,d,e,f,g){a['GrowSumoObject']=e;a[e]=a[e]||function(){
             (a[e].q=a[e].q||[]).push(arguments)},a[e].l=1*new Date();f=b.createElement(c),
             g=b.getElementsByTagName(c)[0];f.async=1;f.src=d;g.parentNode.insertBefore(f,g)
             })(window,document,'script','https://cdn.growsumo.com/assets/v3/growsumo.js','growsumo');
             growsumo.init({
-              customer_key: 'pk_8f4b2c3d5e6a7b8c9d0e1f2a3b4c5d6e',
-              application_key: 'sk_9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d'
+              customer_key: 'pk_YOUR_CUSTOMER_KEY',
+              application_key: 'sk_YOUR_APPLICATION_KEY'
             });
           `,
         }}
