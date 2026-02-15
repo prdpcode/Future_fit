@@ -16,27 +16,30 @@ export default function ContactPage() {
             <h1 className="text-4xl font-black mb-8 tracking-tighter text-center">CONTACT US</h1>
             <div className="space-y-8 text-center">
                 <p className="text-xl text-muted-foreground">
-                    Have questions about your order or our AI tools? We&apos;re here to help.
+                    We are here to help you fit the future.
                 </p>
 
-                <div className="grid gap-4 md:grid-cols-2 text-left bg-secondary p-8 rounded-lg">
+                <div className="grid gap-6 md:grid-cols-2 text-left bg-secondary p-8 rounded-lg">
                     <div>
-                        <h3 className="font-bold mb-2">Customer Support</h3>
-                        <p className="text-muted-foreground">support@wearfuturefit.com</p>
-                        <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                        <h3 className="font-bold mb-2">Business Name</h3>
+                        <p className="text-muted-foreground">Future Fit</p>
                     </div>
                     <div>
-                        <h3 className="font-bold mb-2">Press & Partnerships</h3>
-                        <p className="text-muted-foreground">press@wearfuturefit.com</p>
+                        <h3 className="font-bold mb-2">Founder</h3>
+                        <p className="text-muted-foreground">Pradeep C Hosamani</p>
+                    </div>
+                    <div>
+                        <h3 className="font-bold mb-2">Email</h3>
+                        <a href="mailto:hosamanipch@gmail.com" className="text-foreground hover:underline">hosamanipch@gmail.com</a>
+                    </div>
+                    <div>
+                        <h3 className="font-bold mb-2">Location</h3>
+                        <p className="text-muted-foreground">India</p>
                     </div>
                 </div>
 
-                <div className="pt-8 border-t border-border">
-                    <h2 className="text-2xl font-bold mb-4">Visit HQ</h2>
-                    <p className="text-muted-foreground">
-                        123 Future Boulevard<br />
-                        San Francisco, CA 94107
-                    </p>
+                <div className="pt-8 border-t border-border text-sm text-muted-foreground">
+                    <p>We typically respond within 24 hours.</p>
                 </div>
             </div>
         </div>
