@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { PRODUCTS } from "@/lib/products";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://futurefit.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wearfuturefit.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const now = new Date();

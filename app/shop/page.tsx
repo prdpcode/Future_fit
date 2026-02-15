@@ -197,13 +197,16 @@ export default function ShopPage() {
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-4xl font-black mb-8 tracking-tighter">COLLECTION 01</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {PRODUCTS.map((product) => (
+                    {PRODUCTS.map((product, index) => (
                         <Link href={`/product/${product.slug}`} key={product.id} className="group animate-on-scroll">
                             <div className="aspect-[3/4] relative bg-secondary rounded-lg overflow-hidden mb-2">
                                 <Image
                                     src={product.image}
                                     alt={product.name}
                                     fill
+                                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    priority={index < 4}
+                                    loading={index < 4 ? undefined : "lazy"}
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />

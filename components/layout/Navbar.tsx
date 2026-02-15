@@ -56,6 +56,7 @@ export default function Navbar() {
                 </Link>
                 <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
                     <Link href="/shop" className="hover:text-foreground transition-colors">Shop</Link>
+                    <Link href="/fit-finder" className="hover:text-foreground transition-colors">AI Fit Finder</Link>
                     <Link href="/studio" className="hover:text-foreground transition-colors">Studio</Link>
                     <Link href="/collections" className="hover:text-foreground transition-colors">Collections</Link>
                     <Link href="/careers" className="hover:text-foreground transition-colors">Careers</Link>

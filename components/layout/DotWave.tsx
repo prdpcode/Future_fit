@@ -39,46 +39,21 @@ export default function DotWave() {
         };
 
         const draw = () => {
-            // Clear canvas
             ctx.clearRect(0, 0, width, height);
 
-            // Set color based on theme (naive implementation, assumes light/dark toggle exists or system pref)
-            // Ideally we'd hook into next-themes properly, but for now let's use a subtle color
-            // that works on both or adapts.
-            // Let's use computed style to get the current foreground color to be safe?
-            // Actually, simpler: use a low opacity generic color that works on both.
-            // On dark mode (black bg), white dots with low opacity.
-            // On light mode (white bg), black dots with low opacity.
-
-            // Robust dark mode detection compatible with CSS media queries
             const isDark = document.documentElement.classList.contains("dark") ||
                 window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            // Increased opacity for better visibility
             ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)";
 
             dots.forEach((dot) => {
                 const dx = mouseX - dot.x;
                 const dy = mouseY - dot.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-
-                // Wave effect logic
-                // If mouse is near, move dot away or scale it
                 let size = RADIUS;
 
-                // Simple wave: displace slightly away from mouse
                 if (dist < AREA) {
                     const force = (AREA - dist) / AREA;
-
-                    // Displace
-                    // dot.x = dot.originX - (dx * force * 0.5);
-                    // dot.y = dot.originY - (dy * force * 0.5);
-
-                    // Or just scale up
                     size = RADIUS + (SCALE * force);
-                } else {
-                    // Return to origin (spring would be better but simple lerp for now if needed, 
-                    // but here we just calculate position directly effectively)
                 }
 
                 ctx.beginPath();

@@ -43,7 +43,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const addItem = (item: CartItem) => {
         // Basic ID generation for demo if not provided unique
-        const newItem = { ...item, id: item.id || Math.random().toString(36).substr(2, 9) };
+        const newItem = { ...item, id: item.id || Math.random().toString(36).substring(2, 11) };
         setItems((prev) => [...prev, newItem]);
         setIsOpen(true);
     };

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
+import RootLayoutClient from "@/components/layout/RootLayoutClient";
+import ClientEffects from "@/components/layout/ClientEffects";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://futurefit.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wearfuturefit.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -44,21 +46,12 @@ export const metadata: Metadata = {
     title: "Future Fit — AI-Powered Streetwear & Custom Apparel",
     description:
       "Next-gen streetwear designed with AI. Virtual fitting, custom studio, premium quality.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Future Fit — AI-Powered Streetwear",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Future Fit — AI-Powered Streetwear",
     description:
       "Next-gen streetwear designed with AI. Virtual fitting, custom studio, premium quality.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -75,9 +68,6 @@ export const metadata: Metadata = {
 };
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-
-import RootLayoutClient from "@/components/layout/RootLayoutClient";
-import ClientEffects from "@/components/layout/ClientEffects";
 
 export default function RootLayout({
   children,

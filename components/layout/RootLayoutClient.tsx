@@ -3,6 +3,7 @@
 import { CartProvider } from "@/components/cart/CartContext";
 import Navbar from "@/components/layout/Navbar";
 import CartSidebar from "@/components/cart/CartSidebar";
+import ChatBox from "@/components/chat/ChatBox";
 
 export default function RootLayoutClient({
     children,
@@ -16,6 +17,7 @@ export default function RootLayoutClient({
             <div className="pt-16 h-screen overflow-hidden">
                 {children}
             </div>
+            <ChatBox />
         </CartProvider>
     );
 }

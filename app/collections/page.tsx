@@ -39,12 +39,15 @@ export default function CollectionsPage() {
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-4xl font-black mb-8 tracking-tighter">COLLECTIONS</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-20">
-                    {collections.map((collection) => (
+                    {collections.map((collection, index) => (
                         <Link href="/shop" key={collection.id} className="group relative aspect-[4/3] overflow-hidden rounded-lg animate-on-scroll">
                             <Image
                                 src={collection.image}
                                 alt={collection.name}
                                 fill
+                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                priority={index < 4}
+                                loading={index < 4 ? undefined : "lazy"}
                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center transition-colors group-hover:bg-black/50">

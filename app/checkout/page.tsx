@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle, ShoppingBag, ArrowLeft } from "lucide-react";
+import { CheckCircle, ShoppingBag, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useCart } from "@/components/cart/CartContext";
 import { formatCurrency } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 declare global {
     interface Window {
@@ -15,12 +15,17 @@ declare global {
 
 type CheckoutState = "form" | "processing" | "success" | "error";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_RE = /^[6-9]\d{9}$/;
+const PINCODE_RE = /^\d{6}$/;
+
 export default function CheckoutPage() {
-    const { items, total } = useCart();
+    const { items, total, removeItem } = useCart();
     const [state, setState] = useState<CheckoutState>("form");
     const [paymentId, setPaymentId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -29,7 +34,24 @@ export default function CheckoutPage() {
     const [city, setCity] = useState("");
     const [pincode, setPincode] = useState("");
 
-    const formValid = name && email && phone && address && city && pincode && items.length > 0;
+    const validations = useMemo(() => ({
+        name: name.trim().length >= 2,
+        email: EMAIL_RE.test(email),
+        phone: PHONE_RE.test(phone),
+        address: address.trim().length >= 5,
+        city: city.trim().length >= 2,
+        pincode: PINCODE_RE.test(pincode),
+    }), [name, email, phone, address, city, pincode]);
+
+    const allValid = Object.values(validations).every(Boolean) && items.length > 0;
+
+    const markTouched = (field: string) => setTouched((prev) => ({ ...prev, [field]: true }));
+
+    const fieldError = (field: keyof typeof validations, msg: string) =>
+        touched[field] && !validations[field] ? <p className="text-xs text-destructive mt-1">{msg}</p> : null;
+
+    const inputCls = (field: keyof typeof validations) =>
+        `w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 transition-colors ${touched[field] && !validations[field] ? "ring-2 ring-destructive/50 focus:ring-destructive" : "focus:ring-foreground"}`;
 
     const loadRazorpayScript = (): Promise<boolean> =>
         new Promise((resolve) => {
@@ -42,25 +64,35 @@ export default function CheckoutPage() {
         });
 
     const handlePay = async () => {
-        if (!formValid) return;
+        setTouched({ name: true, email: true, phone: true, address: true, city: true, pincode: true });
+        if (!allValid) {
+            setError("Please fix the highlighted fields before proceeding.");
+            return;
+        }
         setError(null);
         setLoading(true);
 
         try {
-            // 1. Load Razorpay script
             const loaded = await loadRazorpayScript();
-            if (!loaded) { setError("Failed to load Razorpay. Check your internet."); setLoading(false); return; }
+            if (!loaded) { setError("Failed to load payment gateway. Check your internet connection."); setLoading(false); return; }
 
-            // 2. Create order on server
             const res = await fetch("/api/razorpay", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ amount: total }),
             });
             const data = await res.json();
-            if (!res.ok) { setError(data.error || "Failed to create order"); setLoading(false); return; }
 
-            // 3. Open Razorpay checkout
+            if (!res.ok) {
+                if (data.error?.includes("not configured")) {
+                    setError("Payment gateway is being set up. Please try again later or contact support@wearfuturefit.com.");
+                } else {
+                    setError(data.error || "Failed to create order. Please try again.");
+                }
+                setLoading(false);
+                return;
+            }
+
             setState("processing");
             const options: Record<string, unknown> = {
                 key: data.keyId,
@@ -69,10 +101,9 @@ export default function CheckoutPage() {
                 name: "Future Fit",
                 description: `Order of ${items.length} item(s)`,
                 order_id: data.orderId,
-                prefill: { name, email, contact: phone },
+                prefill: { name, email, contact: `+91${phone}` },
                 theme: { color: "#000000" },
                 handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
-                    // 4. Verify payment
                     try {
                         const verifyRes = await fetch("/api/razorpay/verify", {
                             method: "POST",
@@ -83,33 +114,39 @@ export default function CheckoutPage() {
                         if (verifyData.verified) {
                             setPaymentId(verifyData.paymentId);
                             setState("success");
+                            // Send order notification
+                            fetch("/api/notify/order", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    phone, name, email, items, total,
+                                    paymentId: verifyData.paymentId,
+                                    address: `${address}, ${city} - ${pincode}`,
+                                }),
+                            }).catch(() => {});
                         } else {
-                            setError("Payment verification failed.");
+                            setError("Payment verification failed. Contact support if amount was deducted.");
                             setState("error");
                         }
                     } catch {
-                        setError("Payment verification failed.");
+                        setError("Payment verification failed. Contact support if amount was deducted.");
                         setState("error");
                     }
                 },
                 modal: {
-                    ondismiss: () => {
-                        setState("form");
-                        setLoading(false);
-                    },
+                    ondismiss: () => { setState("form"); setLoading(false); },
                 },
             };
 
             const rzp = new window.Razorpay(options);
             rzp.open();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Something went wrong");
+            setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
             setState("form");
             setLoading(false);
         }
     };
 
-    // Success state
     if (state === "success") {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
@@ -117,32 +154,24 @@ export default function CheckoutPage() {
                     <CheckCircle size={40} />
                 </div>
                 <h1 className="text-4xl font-black mb-4 tracking-tighter">Order Confirmed!</h1>
-                <p className="text-xl text-muted-foreground max-w-md mb-4">
-                    Your gear is being prepped for the future. You&apos;ll receive an email confirmation shortly.
+                <p className="text-xl text-muted-foreground max-w-md mb-2">
+                    Your gear is being prepped. You&apos;ll receive a confirmation on +91 {phone}.
                 </p>
-                {paymentId && (
-                    <p className="text-sm text-muted-foreground mb-8">Payment ID: {paymentId}</p>
-                )}
-                <Link
-                    href="/"
-                    className="px-8 py-4 bg-foreground text-background rounded-full font-bold hover:scale-105 transition-transform"
-                >
+                {paymentId && <p className="text-sm text-muted-foreground mb-8">Payment ID: {paymentId}</p>}
+                <Link href="/" className="px-8 py-4 bg-foreground text-background rounded-full font-bold hover:scale-105 transition-transform">
                     Back to Home
                 </Link>
             </div>
         );
     }
 
-    // Empty cart
     if (items.length === 0 && state === "form") {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
                 <ShoppingBag size={48} className="text-muted-foreground mb-4" />
                 <h1 className="text-2xl font-bold mb-2">Your cart is empty</h1>
                 <p className="text-muted-foreground mb-6">Add some items before checking out.</p>
-                <Link href="/shop" className="px-6 py-3 bg-foreground text-background rounded-full font-bold hover:opacity-90 transition-opacity">
-                    Shop Now
-                </Link>
+                <Link href="/shop" className="px-6 py-3 bg-foreground text-background rounded-full font-bold hover:opacity-90 transition-opacity">Shop Now</Link>
             </div>
         );
     }
@@ -156,52 +185,70 @@ export default function CheckoutPage() {
             <h1 className="text-3xl font-black tracking-tighter mb-8">Checkout</h1>
 
             <div className="grid md:grid-cols-5 gap-8">
-                {/* Shipping form — 3 cols */}
                 <div className="md:col-span-3 space-y-4">
                     <h2 className="text-lg font-bold mb-2">Shipping Details</h2>
-                    <input
-                        type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)}
-                        className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground" required
-                    />
-                    <div className="grid grid-cols-2 gap-4">
-                        <input
-                            type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground" required
-                        />
-                        <input
-                            type="tel" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)}
-                            className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground" required
-                        />
+                    <div>
+                        <input type="text" placeholder="Full Name" value={name}
+                            onChange={(e) => setName(e.target.value)} onBlur={() => markTouched("name")}
+                            className={inputCls("name")} />
+                        {fieldError("name", "Name must be at least 2 characters.")}
                     </div>
-                    <input
-                        type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)}
-                        className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground" required
-                    />
                     <div className="grid grid-cols-2 gap-4">
-                        <input
-                            type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)}
-                            className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground" required
-                        />
-                        <input
-                            type="text" placeholder="Pincode" value={pincode} onChange={(e) => setPincode(e.target.value)}
-                            className="w-full p-3 bg-secondary rounded-md outline-none focus:ring-2 focus:ring-foreground" required
-                        />
+                        <div>
+                            <input type="email" placeholder="Email" value={email}
+                                onChange={(e) => setEmail(e.target.value)} onBlur={() => markTouched("email")}
+                                className={inputCls("email")} />
+                            {fieldError("email", "Enter a valid email address.")}
+                        </div>
+                        <div>
+                            <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">+91</span>
+                                <input type="tel" placeholder="Mobile number" value={phone}
+                                    onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))}
+                                    onBlur={() => markTouched("phone")} maxLength={10}
+                                    className={`${inputCls("phone")} pl-12`} />
+                            </div>
+                            {fieldError("phone", "Enter a valid 10-digit Indian mobile number.")}
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Full Address" value={address}
+                            onChange={(e) => setAddress(e.target.value)} onBlur={() => markTouched("address")}
+                            className={inputCls("address")} />
+                        {fieldError("address", "Address must be at least 5 characters.")}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <input type="text" placeholder="City" value={city}
+                                onChange={(e) => setCity(e.target.value)} onBlur={() => markTouched("city")}
+                                className={inputCls("city")} />
+                            {fieldError("city", "Enter a valid city name.")}
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Pincode" value={pincode}
+                                onChange={(e) => setPincode(e.target.value.replace(/[^0-9]/g, "").slice(0, 6))}
+                                onBlur={() => markTouched("pincode")} maxLength={6}
+                                className={inputCls("pincode")} />
+                            {fieldError("pincode", "Enter a valid 6-digit pincode.")}
+                        </div>
                     </div>
                 </div>
 
-                {/* Order summary — 2 cols */}
                 <div className="md:col-span-2">
                     <h2 className="text-lg font-bold mb-4">Order Summary</h2>
                     <div className="space-y-3 mb-4">
                         {items.map((item) => (
                             <div key={item.id} className="flex gap-3 p-3 border border-border rounded-lg bg-card">
                                 <div className="w-14 h-14 bg-muted rounded-md relative overflow-hidden shrink-0">
-                                    <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                    <Image src={item.image} alt={item.name} fill sizes="56px" className="object-cover" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium line-clamp-1">{item.name}</p>
                                     {item.size && <p className="text-xs text-muted-foreground">Size: {item.size}</p>}
-                                    <p className="text-sm font-semibold mt-1">{formatCurrency(item.price)}</p>
+                                    <div className="flex items-center justify-between mt-1">
+                                        <p className="text-sm font-semibold">{formatCurrency(item.price)}</p>
+                                        <button onClick={() => removeItem(item.id)} className="text-xs text-destructive hover:underline">Remove</button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -223,16 +270,14 @@ export default function CheckoutPage() {
                     </div>
 
                     {error && (
-                        <div className="mt-4 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
-                            {error}
+                        <div className="mt-4 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive flex items-start gap-2">
+                            <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                            <span>{error}</span>
                         </div>
                     )}
 
-                    <button
-                        onClick={handlePay}
-                        disabled={!formValid || loading}
-                        className="w-full mt-6 py-4 bg-foreground text-background rounded-full font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
-                    >
+                    <button onClick={handlePay} disabled={loading}
+                        className="w-full mt-6 py-4 bg-foreground text-background rounded-full font-bold hover:opacity-90 transition-opacity disabled:opacity-50">
                         {loading ? "Processing..." : `Pay ${formatCurrency(total)}`}
                     </button>
 

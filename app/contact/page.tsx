@@ -22,12 +22,12 @@ export default function ContactPage() {
                 <div className="grid gap-4 md:grid-cols-2 text-left bg-secondary p-8 rounded-lg">
                     <div>
                         <h3 className="font-bold mb-2">Customer Support</h3>
-                        <p className="text-muted-foreground">support@futurefit.ai</p>
+                        <p className="text-muted-foreground">support@wearfuturefit.com</p>
                         <p className="text-muted-foreground">+1 (555) 123-4567</p>
                     </div>
                     <div>
                         <h3 className="font-bold mb-2">Press & Partnerships</h3>
-                        <p className="text-muted-foreground">press@futurefit.ai</p>
+                        <p className="text-muted-foreground">press@wearfuturefit.com</p>
                     </div>
                 </div>
 

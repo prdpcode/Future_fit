@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import StudioWrapper from "@/components/studio/StudioWrapper";
+import CanvasContainer from "@/components/studio/CanvasContainer";
+import Toolbar from "@/components/studio/Toolbar";
+import LayerManager from "@/components/studio/LayerManager";
+import PropertiesPanel from "@/components/studio/PropertiesPanel";
+import ExportTool from "@/components/studio/ExportTool";
 
 export const metadata: Metadata = {
     title: "Design Studio — Customize Your Gear",
@@ -10,12 +16,6 @@ export const metadata: Metadata = {
         description: "Customize your streetwear with AI-powered design tools.",
     },
 };
-import CanvasContainer from "@/components/studio/CanvasContainer";
-import Toolbar from "@/components/studio/Toolbar";
-import LayerManager from "@/components/studio/LayerManager";
-import PropertiesPanel from "@/components/studio/PropertiesPanel";
-import ExportTool from "@/components/studio/ExportTool";
-import { Suspense } from "react";
 
 export default function StudioPage() {
     return (
