@@ -23,7 +23,7 @@ export default function AffiliatesPage() {
             </p>
             <div className="animate-in fade-in zoom-in duration-1000 delay-500">
               <Link
-                href="https://future-fit.partnerstack.com/apply"
+                href="https://future-fit.goaffpro.com/create-account"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 px-12 py-5 bg-foreground text-background rounded-full font-bold text-lg hover:scale-105 hover:shadow-soft-lg transition-all duration-300 shadow-soft"
@@ -171,7 +171,7 @@ export default function AffiliatesPage() {
               Join the protocol. Earn 15% commission. Help us redefine streetwear through AI.
             </p>
             <Link
-              href="https://future-fit.partnerstack.com/apply"
+              href="https://future-fit.goaffpro.com/create-account"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-12 py-5 bg-foreground text-background rounded-full font-bold text-lg hover:scale-105 hover:shadow-soft-lg transition-all duration-300 shadow-soft"

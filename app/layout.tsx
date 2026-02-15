@@ -87,16 +87,19 @@ export default function RootLayout({
         </RootLayoutClient>
       </body>
       {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
-      {/* PartnerStack (GrowSumo) Production Tracking */}
+      {/* GoAffPro Tracking */}
       <Script
-        id="partnerstack-script"
+        id="goaffpro-script"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            (function(a,b,c,d,e,f,g){a['GrowSumoObject']=e;a[e]=a[e]||function(){
-            (a[e].q=a[e].q||[]).push(arguments)},a[e].l=1*new Date();f=b.createElement(c),
-            g=b.getElementsByTagName(c)[0];f.async=1;f.src=d;g.parentNode.insertBefore(f,g)
-            })(window,document,'script','https://cdn.growsumo.com/assets/v3/growsumo.js','growsumo');
+            (function(w,d,s,o,f,js,fjs){
+              w['GoAffProObject']=o;w[o]=w[o]||function(){
+              (w[o].q=w[o].q||[]).push(arguments)};w[o].l=1*new Date();
+              js=d.createElement(s),fjs=d.getElementsByTagName(s)[0];
+              js.async=1;js.src=f;fjs.parentNode.insertBefore(js,fjs);
+            })(window,document,'script','goaffpro','https://cdn.goaffpro.com/goaffpro.js');
+            goaffpro('init', 'future-fit');
           `,
         }}
       />

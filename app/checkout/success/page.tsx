@@ -2,7 +2,6 @@
 
 import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Script from "next/script";
 import { CheckCircle } from "lucide-react";
 
 function SuccessContent() {
@@ -10,10 +9,8 @@ function SuccessContent() {
   
   useEffect(() => {
     // Get order details from URL params or sessionStorage
-    const orderId = searchParams.get("order_id");
     const paymentId = searchParams.get("payment_id");
     const amount = searchParams.get("amount");
-    const email = searchParams.get("email") || "wearfuturefit@gmail.com"; // Default for testing
     
     // Try to get order details from sessionStorage if not in URL
     const orderDetails = sessionStorage.getItem("future_fit_order");
@@ -27,18 +24,18 @@ function SuccessContent() {
       }
     }
     
-    // Fire PartnerStack conversion only once
-    if (typeof window !== "undefined" && (window as any).growsumo) {
+    // Fire GoAffPro order tracking only once
+    if (typeof window !== "undefined" && (window as any).goaffpro) {
       const finalAmount = amount || (orderData?.total || 0);
-      const finalOrderId = orderId || orderData?.paymentId || paymentId || "unknown";
+      const finalOrderId = paymentId || orderData?.paymentId || "unknown";
       
-      // Convert paise to rupees for PartnerStack
+      // Convert paise to rupees for GoAffPro
       const amountInRupees = Number(finalAmount) / 100;
       
-      (window as any).growsumo.data("purchase", {
-        customer_key: email,
-        amount: amountInRupees,
-        transaction_key: finalOrderId,
+      (window as any).goaffpro('track', 'order', {
+        order_id: finalOrderId,
+        order_subtotal: amountInRupees,
+        currency: 'INR'
       });
       
       // Clear sessionStorage to prevent duplicate tracking
