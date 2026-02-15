@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
                     <h2 className="text-lg font-bold text-foreground mb-3">6. Contact</h2>
                     <p>
                         For data inquiries, email us at{" "}
-                        <a href="mailto:hosamanipch@gmail.com" className="text-foreground underline">hosamanipch@gmail.com</a>.
+                        <a href="mailto:wearfuturefit@gmail.com" className="text-foreground underline">wearfuturefit@gmail.com</a>.
                     </p>
                 </section>
             </div>

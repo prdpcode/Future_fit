@@ -85,7 +85,7 @@ export default function CheckoutPage() {
 
             if (!res.ok) {
                 if (data.error?.includes("not configured")) {
-                    setError("Payment gateway is being set up. Please try again later or contact support@wearfuturefit.com.");
+                    setError("Payment gateway is being set up. Please try again later or contact wearfuturefit@gmail.com.");
                 } else {
                     setError(data.error || "Failed to create order. Please try again.");
                 }
