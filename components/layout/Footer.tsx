@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Mail, MapPin, Clock } from "lucide-react";
 
 export default function Footer() {
     return (
@@ -8,6 +9,20 @@ export default function Footer() {
                     <div>
                         <Link href="/" className="font-black text-xl tracking-tighter">F\F</Link>
                         <p className="mt-3 text-sm text-muted-foreground">Wear the future.</p>
+                        <div className="mt-4 space-y-2 text-xs text-muted-foreground">
+                            <p className="flex items-center gap-2">
+                                <Mail size={12} />
+                                <a href="mailto:wearfuturefit@gmail.com" className="hover:text-foreground transition-colors">wearfuturefit@gmail.com</a>
+                            </p>
+                            <p className="flex items-start gap-2">
+                                <MapPin size={12} className="mt-0.5 shrink-0" />
+                                <span>17/3, Kanayakumari Nilaya, Nagarbhavi Stage 2, Bengaluru, Karnataka 560056</span>
+                            </p>
+                            <p className="flex items-center gap-2">
+                                <Clock size={12} />
+                                <span>Mon–Fri, 10 AM – 6 PM IST</span>
+                            </p>
+                        </div>
                     </div>
 
                     <div>
@@ -38,9 +53,22 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} Future Fit. All rights reserved.</p>
-                    <p>Founded by Pradeep C Hosamani</p>
+                {/* Payment badges */}
+                <div className="mt-10 pt-6 border-t border-border">
+                    <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+                        <span className="text-xs text-muted-foreground">Secure payments via</span>
+                        <div className="flex items-center gap-3">
+                            <span className="px-3 py-1.5 bg-secondary rounded text-xs font-bold tracking-wide">Razorpay</span>
+                            <span className="px-3 py-1.5 bg-secondary rounded text-xs font-medium">Visa</span>
+                            <span className="px-3 py-1.5 bg-secondary rounded text-xs font-medium">Mastercard</span>
+                            <span className="px-3 py-1.5 bg-secondary rounded text-xs font-medium">UPI</span>
+                            <span className="px-3 py-1.5 bg-secondary rounded text-xs font-medium">NetBanking</span>
+                        </div>
+                    </div>
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+                        <p>&copy; {new Date().getFullYear()} Future Fit. All rights reserved.</p>
+                        <p>Founded by Pradeep C Hosamani</p>
+                    </div>
                 </div>
             </div>
         </footer>
