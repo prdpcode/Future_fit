@@ -13,12 +13,12 @@ const orgJsonLd = {
 
 export default function Home() {
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center bg-background text-foreground overflow-hidden relative">
+    <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center bg-background text-foreground relative">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
       />
-      <main className="flex flex-col items-center gap-8 text-center px-4">
+      <div className="flex flex-col items-center gap-8 text-center px-4">
         <h1 className="text-6xl md:text-8xl font-black tracking-tighter animate-in fade-in slide-in-from-bottom-4 duration-1000">
           FUTURE FIT
         </h1>
@@ -40,11 +40,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </main>
-
-      <footer className="absolute bottom-8 text-sm text-muted-foreground z-10">
-        © 2026 Future Fit AI Studio
-      </footer>
+      </div>
     </div>
   );
 }

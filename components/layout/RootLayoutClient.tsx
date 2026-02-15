@@ -15,7 +15,7 @@ export default function RootLayoutClient({
         <CartProvider>
             <Navbar />
             <CartSidebar />
-            <main className="pt-16 min-h-screen">
+            <main className="pt-16">
                 {children}
             </main>
             <Footer />

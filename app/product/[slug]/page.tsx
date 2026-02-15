@@ -62,7 +62,7 @@ export default async function ProductPage({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar flex items-center">
+        <div className="flex items-center min-h-[calc(100vh-4rem)]">
             <div className="container mx-auto px-4 py-4 lg:py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     {/* Gallery */}

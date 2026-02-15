@@ -80,8 +80,8 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-  /* Prevent global scroll */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll only */
 }
 
 @layer utilities {

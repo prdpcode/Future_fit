@@ -20,7 +20,7 @@ export default function Footer() {
                             </p>
                             <p className="flex items-center gap-2">
                                 <Clock size={12} />
-                                <span>Mon–Fri, 10 AM – 6 PM IST</span>
+                                <span>Mon–Sat, 10 AM – 6 PM IST</span>
                             </p>
                         </div>
                     </div>
@@ -67,7 +67,7 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
                         <p>&copy; {new Date().getFullYear()} Future Fit. All rights reserved.</p>
-                        <p>Founded by Pradeep C Hosamani</p>
+                        <p>GSTIN: 29ANDPH4834K1ZR | Legal Entity: Future Fit</p>
                     </div>
                 </div>
             </div>
