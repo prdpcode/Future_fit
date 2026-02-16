@@ -5,6 +5,13 @@ export async function POST(req: NextRequest) {
     const key_id = process.env.RAZORPAY_KEY_ID;
     const key_secret = process.env.RAZORPAY_KEY_SECRET;
 
+    // Debug logging
+    console.log("Environment check:", {
+        key_id: key_id ? "present" : "missing",
+        key_secret: key_secret ? "present" : "missing",
+        node_env: process.env.NODE_ENV
+    });
+
     if (!key_id || !key_secret) {
         return NextResponse.json(
             { error: "Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env.local." },
