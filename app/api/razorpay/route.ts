@@ -42,6 +42,12 @@ export async function POST(req: NextRequest) {
         });
     } catch (err) {
         console.error("Razorpay order error:", err);
+        console.error("Error details:", {
+            message: err instanceof Error ? err.message : "Unknown error",
+            stack: err instanceof Error ? err.stack : undefined,
+            key_id_prefix: key_id?.substring(0, 8) || "missing",
+            key_secret_length: key_secret?.length || 0
+        });
         return NextResponse.json(
             { error: err instanceof Error ? err.message : "Failed to create order" },
             { status: 500 }
