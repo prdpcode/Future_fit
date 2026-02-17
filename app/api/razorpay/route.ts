@@ -1,17 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
-import { SecurityValidator, RateLimiter } from "@/lib/security";
+import { orderRateLimit } from "@/lib/upstash-ratelimit";
+import { RazorpayOrderSchema } from "@/lib/validation";
 
 export async function POST(req: NextRequest) {
-    // Rate limiting based on IP
-    const clientIP = req.headers.get('x-forwarded-for') || 
-                     req.headers.get('x-real-ip') || 
-                     'unknown';
+    // Upstash rate limiting
+    const identifier = req.headers.get('x-forwarded-for') || 
+                       req.headers.get('x-real-ip') || 
+                       'unknown';
     
-    if (!RateLimiter.isAllowed(clientIP, 5, 60000)) { // 5 requests per minute
+    const { success, limit, remaining, reset } = await orderRateLimit.limit(identifier);
+    
+    if (!success) {
         return NextResponse.json(
             { error: "Too many requests. Please try again later." },
-            { status: 429 }
+            { 
+                status: 429,
+                headers: {
+                    'X-RateLimit-Limit': limit.toString(),
+                    'X-RateLimit-Remaining': remaining.toString(),
+                    'X-RateLimit-Reset': reset.toString(),
+                }
+            }
         );
     }
 
@@ -33,22 +43,22 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const { amount, currency = "INR", receipt } = await req.json();
-
-        // Validate input
-        if (!SecurityValidator.validateAmount(amount)) {
-            return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+        const body = await req.json();
+        
+        // Zod validation
+        const validationResult = RazorpayOrderSchema.safeParse(body);
+        
+        if (!validationResult.success) {
+            return NextResponse.json(
+                { 
+                    error: "Invalid input", 
+                    details: validationResult.error.errors 
+                },
+                { status: 400 }
+            );
         }
-
-        // Validate currency
-        if (currency !== "INR") {
-            return NextResponse.json({ error: "Invalid currency" }, { status: 400 });
-        }
-
-        // Validate receipt if provided
-        if (receipt && (typeof receipt !== 'string' || receipt.length > 50)) {
-            return NextResponse.json({ error: "Invalid receipt" }, { status: 400 });
-        }
+        
+        const { amount, currency = "INR", receipt } = validationResult.data;
 
         const razorpay = new Razorpay({ key_id, key_secret });
 
@@ -63,6 +73,12 @@ export async function POST(req: NextRequest) {
             amount: order.amount,
             currency: order.currency,
             keyId: key_id,
+        }, {
+            headers: {
+                'X-RateLimit-Limit': limit.toString(),
+                'X-RateLimit-Remaining': remaining.toString(),
+                'X-RateLimit-Reset': reset.toString(),
+            }
         });
     } catch (err) {
         console.error("Razorpay order error:", err);
