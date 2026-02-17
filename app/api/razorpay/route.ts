@@ -1,27 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
-import { orderRateLimit } from "@/lib/upstash-ratelimit";
 import { RazorpayOrderSchema } from "@/lib/validation";
 
+// Simple in-memory rate limiting for Netlify
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(identifier: string, limit: number = 5, windowMs: number = 60000): boolean {
+    const now = Date.now();
+    const record = rateLimitStore.get(identifier);
+    
+    if (!record || now > record.resetTime) {
+        rateLimitStore.set(identifier, { count: 1, resetTime: now + windowMs });
+        return true;
+    }
+    
+    if (record.count >= limit) {
+        return false;
+    }
+    
+    record.count++;
+    return true;
+}
+
 export async function POST(req: NextRequest) {
-    // Upstash rate limiting
+    // Simple rate limiting
     const identifier = req.headers.get('x-forwarded-for') || 
                        req.headers.get('x-real-ip') || 
                        'unknown';
     
-    const { success, limit, remaining, reset } = await orderRateLimit.limit(identifier);
-    
-    if (!success) {
+    if (!checkRateLimit(identifier, 5, 60000)) { // 5 requests per minute
         return NextResponse.json(
             { error: "Too many requests. Please try again later." },
-            { 
-                status: 429,
-                headers: {
-                    'X-RateLimit-Limit': limit.toString(),
-                    'X-RateLimit-Remaining': remaining.toString(),
-                    'X-RateLimit-Reset': reset.toString(),
-                }
-            }
+            { status: 429 }
         );
     }
 
@@ -73,12 +83,6 @@ export async function POST(req: NextRequest) {
             amount: order.amount,
             currency: order.currency,
             keyId: key_id,
-        }, {
-            headers: {
-                'X-RateLimit-Limit': limit.toString(),
-                'X-RateLimit-Remaining': remaining.toString(),
-                'X-RateLimit-Reset': reset.toString(),
-            }
         });
     } catch (err) {
         console.error("Razorpay order error:", err);

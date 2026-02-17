@@ -1,7 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { createClient } from "@supabase/supabase-js";
-import { RateLimiter } from "@/lib/security";
+
+// Simple in-memory rate limiting for webhooks
+const webhookRateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+function checkWebhookRateLimit(identifier: string, limit: number = 20, windowMs: number = 60000): boolean {
+    const now = Date.now();
+    const record = webhookRateLimitStore.get(identifier);
+    
+    if (!record || now > record.resetTime) {
+        webhookRateLimitStore.set(identifier, { count: 1, resetTime: now + windowMs });
+        return true;
+    }
+    
+    if (record.count >= limit) {
+        return false;
+    }
+    
+    record.count++;
+    return true;
+}
 
 export async function POST(req: NextRequest) {
   // Rate limiting for webhook endpoint
@@ -9,7 +28,7 @@ export async function POST(req: NextRequest) {
                    req.headers.get('x-real-ip') || 
                    'unknown';
   
-  if (!RateLimiter.isAllowed(clientIP, 20, 60000)) { // 20 requests per minute
+  if (!checkWebhookRateLimit(clientIP, 20, 60000)) { // 20 requests per minute
     return NextResponse.json(
       { error: "Too many requests" },
       { status: 429 }
