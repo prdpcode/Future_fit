@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 
 export async function POST(req: NextRequest) {
-    // Temporarily use test keys to debug
-    const key_id = "rzp_test_SGO9BsiIJdbVRe";
-    const key_secret = "L68Tex4txyx8KUbccUE547cJ";
+    const key_id = process.env.RAZORPAY_KEY_ID;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET;
 
     // Debug logging
     console.log("Environment check:", {
