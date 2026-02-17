@@ -9,12 +9,15 @@ export interface CartItem {
     image: string;
     customized?: boolean;
     size?: string;
+    quantity: number;
+    slug: string; // Product slug for unique identification
 }
 
 interface CartContextType {
     items: CartItem[];
     addItem: (item: CartItem) => void;
     removeItem: (id: string) => void;
+    updateQuantity: (id: string, quantity: number) => void;
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
     total: number;
@@ -42,9 +45,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, [items]);
 
     const addItem = (item: CartItem) => {
-        // Basic ID generation for demo if not provided unique
-        const newItem = { ...item, id: item.id || Math.random().toString(36).substring(2, 11) };
-        setItems((prev) => [...prev, newItem]);
+        // Create unique ID based on slug and size
+        const uniqueId = `${item.slug}-${item.size || 'default'}`;
+        
+        setItems((prev) => {
+            const existingItem = prev.find((i) => i.id === uniqueId);
+            if (existingItem) {
+                // Update quantity if item already exists
+                return prev.map((i) => 
+                    i.id === uniqueId 
+                        ? { ...i, quantity: i.quantity + (item.quantity || 1) }
+                        : i
+                );
+            } else {
+                // Add new item with quantity
+                const newItem = { 
+                    ...item, 
+                    id: uniqueId, 
+                    quantity: item.quantity || 1 
+                };
+                return [...prev, newItem];
+            }
+        });
         setIsOpen(true);
     };
 
@@ -52,10 +74,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setItems((prev) => prev.filter((item) => item.id !== id));
     };
 
-    const total = items.reduce((acc, item) => acc + item.price, 0);
+    const updateQuantity = (id: string, quantity: number) => {
+        if (quantity <= 0) {
+            removeItem(id);
+            return;
+        }
+        setItems((prev) => 
+            prev.map((item) => 
+                item.id === id ? { ...item, quantity } : item
+            )
+        );
+    };
+
+    const total = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
     return (
-        <CartContext.Provider value={{ items, addItem, removeItem, isOpen, setIsOpen, total }}>
+        <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, isOpen, setIsOpen, total }}>
             {children}
         </CartContext.Provider>
     );

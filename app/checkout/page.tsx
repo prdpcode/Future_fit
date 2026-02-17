@@ -38,7 +38,7 @@ async function loadRazorpayScript(): Promise<boolean> {
 }
 
 export default function CheckoutPage() {
-    const { items, total, removeItem } = useCart();
+    const { items, total, removeItem, updateQuantity } = useCart();
     const [state, setState] = useState<CheckoutState>("form");
     const [paymentId, setPaymentId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -282,9 +282,27 @@ export default function CheckoutPage() {
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium line-clamp-1">{item.name}</p>
                                     {item.size && <p className="text-xs text-muted-foreground">Size: {item.size}</p>}
-                                    <div className="flex items-center justify-between mt-1">
-                                        <p className="text-sm font-semibold">{formatCurrency(item.price)}</p>
-                                        <button onClick={() => removeItem(item.id)} className="text-xs text-destructive hover:underline">Remove</button>
+                                    <div className="flex items-center justify-between mt-2">
+                                        <div className="flex items-center gap-2">
+                                            <button 
+                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                className="w-6 h-6 rounded border border-border bg-background hover:bg-muted flex items-center justify-center text-xs"
+                                                disabled={item.quantity <= 1}
+                                            >
+                                                -
+                                            </button>
+                                            <span className="text-sm font-medium w-8 text-center">{item.quantity}</span>
+                                            <button 
+                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                className="w-6 h-6 rounded border border-border bg-background hover:bg-muted flex items-center justify-center text-xs"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-sm font-semibold">{formatCurrency(item.price * item.quantity)}</p>
+                                            <button onClick={() => removeItem(item.id)} className="text-xs text-destructive hover:underline">Remove</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

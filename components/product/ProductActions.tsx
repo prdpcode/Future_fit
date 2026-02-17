@@ -40,7 +40,13 @@ export default function ProductActions({ product }: { product: Product }) {
             setSizeError(true);
             return;
         }
-        addItem({ ...product, customized: false, size: selectedSize });
+        addItem({ 
+            ...product, 
+            customized: false, 
+            size: selectedSize,
+            slug: product.slug,
+            quantity: 1
+        });
     };
 
     const handleCustomize = () => {
