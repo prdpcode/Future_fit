@@ -6,6 +6,7 @@ import { CheckCircle, ShoppingBag, ArrowLeft, AlertTriangle } from "lucide-react
 import { useCart } from "@/components/cart/CartContext";
 import { formatCurrency } from "@/lib/utils";
 import { updateStockAfterPurchase } from "@/lib/actions/inventory";
+import { SecurityValidator } from "@/lib/security";
 import { useState, useMemo } from "react";
 
 declare global {
@@ -53,12 +54,12 @@ export default function CheckoutPage() {
     const [pincode, setPincode] = useState("");
 
     const validations = useMemo(() => ({
-        name: name.trim().length >= 2,
-        email: EMAIL_RE.test(email),
-        phone: PHONE_RE.test(phone),
-        address: address.trim().length >= 5,
-        city: city.trim().length >= 2,
-        pincode: PINCODE_RE.test(pincode),
+        name: SecurityValidator.validateName(name),
+        email: SecurityValidator.validateEmail(email),
+        phone: SecurityValidator.validatePhone(phone),
+        address: SecurityValidator.validateAddress(address),
+        city: SecurityValidator.validateName(city) && city.trim().length >= 2,
+        pincode: SecurityValidator.validatePincode(pincode),
     }), [name, email, phone, address, city, pincode]);
 
     const allValid = Object.values(validations).every(Boolean) && items.length > 0;

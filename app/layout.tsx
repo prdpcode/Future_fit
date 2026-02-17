@@ -5,6 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import RootLayoutClient from "@/components/layout/RootLayoutClient";
 import ClientEffects from "@/components/layout/ClientEffects";
+import "@/lib/env-validation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
