@@ -5,6 +5,7 @@ import Image from "next/image";
 import { CheckCircle, ShoppingBag, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useCart } from "@/components/cart/CartContext";
 import { formatCurrency } from "@/lib/utils";
+import { updateStockAfterPurchase } from "@/lib/actions/inventory";
 import { useState, useMemo } from "react";
 
 declare global {
@@ -132,10 +133,9 @@ export default function CheckoutPage() {
                             setPaymentId(verifyData.paymentId);
                             
                             // Decrement stock for each purchased item
-                            const inventoryModule = await import("@/lib/actions/inventory");
                             for (const item of items) {
                                 const slug = item.id.replace(/^.*:/, ""); // Remove any prefix if present
-                                await inventoryModule.updateStockAfterPurchase(slug, 1);
+                                await updateStockAfterPurchase(slug, 1);
                             }
                             
                             // Store order details for PartnerStack tracking
