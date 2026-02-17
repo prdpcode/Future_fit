@@ -5,6 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import RootLayoutClient from "@/components/layout/RootLayoutClient";
 import ClientEffects from "@/components/layout/ClientEffects";
+import Clarity from "@/components/Clarity";
 import "@/lib/env-validation";
 
 const geistSans = Geist({
@@ -88,6 +89,8 @@ export default function RootLayout({
         </RootLayoutClient>
       </body>
       {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
+      {/* Microsoft Clarity Analytics */}
+      <Clarity />
       {/* GoAffPro Tracking */}
       <Script
         id="goaffpro-script"
