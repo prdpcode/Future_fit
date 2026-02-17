@@ -22,7 +22,7 @@ export default function SocialGallery() {
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Mock social posts (in production, fetch from your API)
   const mockPosts: SocialPost[] = [
