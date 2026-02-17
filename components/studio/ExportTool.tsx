@@ -37,7 +37,9 @@ export default function ExportTool() {
                     name: "Custom Design",
                     price: 1999, // Base custom price
                     image: dataURL,
-                    customized: true
+                    customized: true,
+                    quantity: 1,
+                    slug: "custom-design"
                 });
                 // Optional: navigate to cart or show success
             }
