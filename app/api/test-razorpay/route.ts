@@ -13,7 +13,7 @@ export async function GET() {
         const razorpay = new Razorpay({ key_id, key_secret });
         
         // Test account details
-        const account = await razorpay.accounts.fetch();
+        const account = await razorpay.accounts.all();
         
         return NextResponse.json({
             success: true,
