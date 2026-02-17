@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Heart, ShoppingBag, User, Camera } from "lucide-react";
+import { Heart, ShoppingBag, User, Camera, Upload } from "lucide-react";
 
 interface SocialPost {
   id: string;
@@ -22,6 +22,7 @@ export default function SocialGallery() {
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Mock social posts (in production, fetch from your API)
@@ -124,7 +125,10 @@ export default function SocialGallery() {
           <p className="text-muted-foreground mb-6">
             See how others are styling Future Fit. Share your look with #FutureFitStyle
           </p>
-          <button className="bg-foreground text-background px-6 py-3 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 mx-auto">
+          <button 
+            onClick={() => setShowUploadModal(true)}
+            className="bg-foreground text-background px-6 py-3 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 mx-auto"
+          >
             <Camera size={18} />
             Share Your Style
           </button>
@@ -196,6 +200,65 @@ export default function SocialGallery() {
             <div className="inline-flex items-center gap-2 text-muted-foreground">
               <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               Loading more styles...
+            </div>
+          </div>
+        )}
+
+        {/* Upload Modal */}
+        {showUploadModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-background rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4">Share Your Style</h3>
+              <p className="text-muted-foreground mb-6">
+                Show off your Future Fit style! Upload your photo and inspire others.
+              </p>
+              
+              <div className="space-y-4">
+                <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
+                  <Upload className="mx-auto mb-2 text-muted-foreground" size={32} />
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Click to upload or drag and drop
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    id="file-upload"
+                    onChange={(e) => {
+                      // Handle file upload
+                      console.log('File uploaded:', e.target.files?.[0]);
+                    }}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="inline-block mt-2 px-4 py-2 bg-foreground text-background rounded-md text-sm font-medium cursor-pointer hover:opacity-90 transition-opacity"
+                  >
+                    Choose File
+                  </label>
+                </div>
+                
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowUploadModal(false)}
+                    className="flex-1 px-4 py-2 border border-border rounded-md text-sm font-medium hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Handle submission
+                      alert('Feature coming soon! Thank you for sharing your style.');
+                      setShowUploadModal(false);
+                    }}
+                    className="flex-1 px-4 py-2 bg-foreground text-background rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+                  >
+                    Share
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

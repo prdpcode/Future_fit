@@ -102,7 +102,6 @@ export default function Home() {
       <LazyFeatureLoader feature="social-gallery" />
       <LazyFeatureLoader feature="rewards" />
       <LazyFeatureLoader feature="sustainability" />
-
-          </div>
+    </div>
   );
 }
