@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
       "three",
       "fabric",
     ],
+    optimizeServerReact: true,
   },
   headers: async () => [
     {
