@@ -55,15 +55,15 @@ export default function Home() {
       </div>
 
       {/* Features Preview */}
-      <div className="py-20 bg-muted/30">
+      <div className="py-12 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Experience the Future</h2>
-            <p className="text-muted-foreground">AI-driven features that enhance your shopping journey</p>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-3">Experience the Future</h2>
+            <p className="text-muted-foreground text-sm">AI-driven features that enhance your shopping journey</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-shadow">
+          <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+            <div className="text-center p-4 rounded-lg bg-background hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="text-primary" size={24} />
               </div>
@@ -71,28 +71,20 @@ export default function Home() {
               <p className="text-sm text-muted-foreground">Personalized recommendations powered by AI</p>
             </div>
             
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-4 rounded-lg bg-background hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Users className="text-primary" size={24} />
               </div>
               <h3 className="font-semibold mb-2">Social Shopping</h3>
               <p className="text-sm text-muted-foreground">See how others style Future Fit</p>
             </div>
             
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-4 rounded-lg bg-background hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Trophy className="text-primary" size={24} />
               </div>
               <h3 className="font-semibold mb-2">Rewards System</h3>
               <p className="text-sm text-muted-foreground">Earn points and unlock achievements</p>
-            </div>
-            
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Leaf className="text-primary" size={24} />
-              </div>
-              <h3 className="font-semibold mb-2">Sustainability</h3>
-              <p className="text-sm text-muted-foreground">Track your environmental impact</p>
             </div>
           </div>
         </div>
@@ -101,7 +93,6 @@ export default function Home() {
       {/* Lazy Loaded Features */}
       <LazyFeatureLoader feature="social-gallery" />
       <LazyFeatureLoader feature="rewards" />
-      <LazyFeatureLoader feature="sustainability" />
     </div>
   );
 }

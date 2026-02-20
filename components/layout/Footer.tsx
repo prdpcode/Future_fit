@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin, Clock, Instagram, Twitter } from "lucide-react";
+import { Mail, MapPin, Clock, Instagram, Twitter, Linkedin } from "lucide-react";
 
 export default function Footer() {
     return (
@@ -37,6 +37,7 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-sm mb-3">Company</h4>
                         <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/about" className="hover:text-foreground transition-colors">About Us</Link></li>
                             <li><Link href="/studio" className="hover:text-foreground transition-colors">Studio</Link></li>
                             <li><Link href="/careers" className="hover:text-foreground transition-colors">Careers</Link></li>
                             <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact Us</Link></li>
@@ -69,8 +70,11 @@ export default function Footer() {
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
                         <p>&copy; {new Date().getFullYear()} Future Fit. All rights reserved.</p>
                         <div className="flex items-center gap-4">
-                            <a href="https://instagram.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Instagram">
+                            <a href="https://www.instagram.com/wearfuturefit/" target="_blank" rel="me noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Instagram">
                                 <Instagram size={16} />
+                            </a>
+                            <a href="https://linkedin.com/company/future-fit" target="_blank" rel="me noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="LinkedIn">
+                                <Linkedin size={16} />
                             </a>
                             <a href="https://twitter.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Twitter">
                                 <Twitter size={16} />

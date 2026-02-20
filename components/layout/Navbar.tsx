@@ -16,6 +16,7 @@ function useHasHydrated(): boolean {
 
 const NAV_LINKS = [
     { href: "/shop", label: "Shop" },
+    { href: "/about", label: "About" },
     { href: "/fit-finder", label: "AI Fit Finder" },
     { href: "/studio", label: "Studio" },
     { href: "/collections", label: "Collections" },
@@ -74,7 +75,7 @@ export default function Navbar() {
 
                 <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                     <Link
-                        href={isAuthed ? "/logout" : "/login"}
+                        href={hasHydrated ? (isAuthed ? "/logout" : "/login") : "/login"}
                         className="flex items-center gap-2 p-2 hover:bg-muted rounded-full transition-colors"
                     >
                         <User size={20} />
@@ -130,12 +131,12 @@ export default function Navbar() {
                         </nav>
                         <div className="p-4 border-t border-border">
                             <Link
-                                href={isAuthed ? "/logout" : "/login"}
+                                href={hasHydrated ? (isAuthed ? "/logout" : "/login") : "/login"}
                                 onClick={() => setMobileOpen(false)}
                                 className="flex items-center gap-3 px-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 <User size={18} />
-                                {isAuthed && userName ? userName : "Sign In"}
+                                {hasHydrated ? (isAuthed && userName ? userName : "Sign In") : "Sign In"}
                             </Link>
                         </div>
                     </div>

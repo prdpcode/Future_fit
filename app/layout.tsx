@@ -24,11 +24,11 @@ const SITE_URL = "https://wearfuturefit.com";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Future Fit | AI-Powered Streetwear & Futuristic Fashion",
+    default: "Future Fit | Premium Streetwear",
     template: "%s | Future Fit",
   },
   description:
-    "Discover Future Fit, India's premier AI-driven streetwear brand. Shop our collections of oversized tees, hoodies, and tech-fleece apparel designed with AI precision.",
+    "Future Fit is a premium AI-powered streetwear brand based in Bengaluru, India, specializing in heavyweight artifacts and tech-driven fashion.",
   keywords: [
     "Future Fit",
     "AI Streetwear",
@@ -80,6 +80,34 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Future Fit",
+              "url": "https://wearfuturefit.com",
+              "description": "Future Fit is a premium AI-powered streetwear brand based in Bengaluru, India, specializing in heavyweight artifacts and tech-driven fashion.",
+              "sameAs": [
+                "https://www.instagram.com/wearfuturefit/",
+                "https://linkedin.com/company/future-fit"
+              ],
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Bengaluru",
+                "addressCountry": "India"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "info@wearfuturefit.com",
+                "contactType": "customer service"
+              }
+            }),
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
