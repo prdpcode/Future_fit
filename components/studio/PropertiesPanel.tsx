@@ -3,7 +3,7 @@
 import { useCanvas } from "./CanvasContext";
 import { useState, useEffect } from "react";
 import * as fabric from "fabric";
-import { Palette } from "lucide-react";
+import { Palette, Move, RotateCw, Maximize2, FlipHorizontal, FlipVertical } from "lucide-react";
 
 export default function PropertiesPanel() {
     const { canvas, activeObject } = useCanvas();
@@ -55,47 +55,76 @@ export default function PropertiesPanel() {
         setSelectedColor(color);
         setIsGradientMode(false);
 
-        if (activeObject.type === 'text' || activeObject.type === 'i-text') {
-            (activeObject as fabric.Text).set('fill', color);
-        } else if (activeObject.type === 'rect' || activeObject.type === 'circle' || activeObject.type === 'triangle') {
-            (activeObject as fabric.Object).set('fill', color);
-        } else if (activeObject.type === 'path' || activeObject.type === 'group') {
-            (activeObject as fabric.Object).set('fill', color);
-        } else if (activeObject.type === 'image') {
-            (activeObject as fabric.Image).set('tint', color);
-        }
+        console.log('Applying color:', color, 'to object type:', activeObject.type);
 
-        canvas.requestRenderAll();
+        try {
+            if (activeObject.type === 'text' || activeObject.type === 'i-text') {
+                (activeObject as fabric.Text).set('fill', color);
+                console.log('Applied color to text');
+            } else if (activeObject.type === 'rect' || activeObject.type === 'circle' || activeObject.type === 'triangle') {
+                (activeObject as fabric.Object).set('fill', color);
+                console.log('Applied color to shape');
+            } else if (activeObject.type === 'path' || activeObject.type === 'group') {
+                (activeObject as fabric.Object).set('fill', color);
+                console.log('Applied color to path/group');
+            } else if (activeObject.type === 'image') {
+                (activeObject as fabric.Image).set('tint', color);
+                console.log('Applied tint to image');
+            } else {
+                // Fallback for any other object type
+                (activeObject as fabric.Object).set('fill', color);
+                console.log('Applied color to unknown object type');
+            }
+
+            canvas.requestRenderAll();
+            setForceUpdate(prev => prev + 1);
+        } catch (error) {
+            console.error('Error applying color:', error);
+        }
     };
 
     const handleGradientChange = (colors: string[], angle: number) => {
         if (!canvas || !activeObject) return;
         setIsGradientMode(true);
 
-        const gradient = new fabric.Gradient({
-            type: 'linear',
-            gradientUnits: 'pixels',
-            coords: {
-                x1: 0,
-                y1: 0,
-                x2: Math.cos(angle * Math.PI / 180) * 100,
-                y2: Math.sin(angle * Math.PI / 180) * 100
-            },
-            colorStops: [
-                { offset: 0, color: colors[0] },
-                { offset: 1, color: colors[1] }
-            ]
-        });
+        console.log('Applying gradient:', colors, 'angle:', angle, 'to object type:', activeObject.type);
 
-        if (activeObject.type === 'text' || activeObject.type === 'i-text') {
-            (activeObject as fabric.Text).set('fill', gradient);
-        } else if (activeObject.type === 'rect' || activeObject.type === 'circle' || activeObject.type === 'triangle') {
-            (activeObject as fabric.Object).set('fill', gradient);
-        } else if (activeObject.type === 'path' || activeObject.type === 'group') {
-            (activeObject as fabric.Object).set('fill', gradient);
+        try {
+            const gradient = new fabric.Gradient({
+                type: 'linear',
+                gradientUnits: 'pixels',
+                coords: {
+                    x1: 0,
+                    y1: 0,
+                    x2: Math.cos(angle * Math.PI / 180) * 100,
+                    y2: Math.sin(angle * Math.PI / 180) * 100
+                },
+                colorStops: [
+                    { offset: 0, color: colors[0] },
+                    { offset: 1, color: colors[1] }
+                ]
+            });
+
+            if (activeObject.type === 'text' || activeObject.type === 'i-text') {
+                (activeObject as fabric.Text).set('fill', gradient);
+                console.log('Applied gradient to text');
+            } else if (activeObject.type === 'rect' || activeObject.type === 'circle' || activeObject.type === 'triangle') {
+                (activeObject as fabric.Object).set('fill', gradient);
+                console.log('Applied gradient to shape');
+            } else if (activeObject.type === 'path' || activeObject.type === 'group') {
+                (activeObject as fabric.Object).set('fill', gradient);
+                console.log('Applied gradient to path/group');
+            } else {
+                // Fallback for any other object type
+                (activeObject as fabric.Object).set('fill', gradient);
+                console.log('Applied gradient to unknown object type');
+            }
+
+            canvas.requestRenderAll();
+            setForceUpdate(prev => prev + 1);
+        } catch (error) {
+            console.error('Error applying gradient:', error);
         }
-
-        canvas.requestRenderAll();
     };
 
     const handleColorCodeInput = (colorCode: string) => {
@@ -168,6 +197,252 @@ export default function PropertiesPanel() {
                     </div>
                 </div>
             )}
+
+            {/* Transform Controls Section */}
+            <div className="border-t border-border pt-4">
+                <h3 className="font-semibold text-xs uppercase text-muted-foreground mb-3 flex items-center gap-2">
+                    <Move size={12} />
+                    Transform
+                </h3>
+                <div className="space-y-3">
+                    {/* Position Controls */}
+                    <div className="grid grid-cols-2 gap-2">
+                        <div>
+                            <label className="text-xs text-muted-foreground">X Position</label>
+                            <input
+                                type="number"
+                                value={Math.round(activeObject.left || 0)}
+                                onChange={(e) => {
+                                    const x = parseInt(e.target.value);
+                                    if (!isNaN(x)) {
+                                        activeObject.set('left', x);
+                                        canvas?.requestRenderAll();
+                                        setForceUpdate(prev => prev + 1);
+                                    }
+                                }}
+                                className="w-full px-2 py-1 text-xs border border-border rounded bg-background"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs text-muted-foreground">Y Position</label>
+                            <input
+                                type="number"
+                                value={Math.round(activeObject.top || 0)}
+                                onChange={(e) => {
+                                    const y = parseInt(e.target.value);
+                                    if (!isNaN(y)) {
+                                        activeObject.set('top', y);
+                                        canvas?.requestRenderAll();
+                                        setForceUpdate(prev => prev + 1);
+                                    }
+                                }}
+                                className="w-full px-2 py-1 text-xs border border-border rounded bg-background"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Size Controls */}
+                    <div className="grid grid-cols-2 gap-2">
+                        <div>
+                            <label className="text-xs text-muted-foreground">Width</label>
+                            <input
+                                type="number"
+                                value={Math.round((activeObject.width || 0) * (activeObject.scaleX || 1))}
+                                onChange={(e) => {
+                                    const width = parseInt(e.target.value);
+                                    if (!isNaN(width) && width > 0) {
+                                        const currentScaleX = activeObject.scaleX || 1;
+                                        activeObject.set('width', width / currentScaleX);
+                                        canvas?.requestRenderAll();
+                                        setForceUpdate(prev => prev + 1);
+                                    }
+                                }}
+                                className="w-full px-2 py-1 text-xs border border-border rounded bg-background"
+                                min="10"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs text-muted-foreground">Height</label>
+                            <input
+                                type="number"
+                                value={Math.round((activeObject.height || 0) * (activeObject.scaleY || 1))}
+                                onChange={(e) => {
+                                    const height = parseInt(e.target.value);
+                                    if (!isNaN(height) && height > 0) {
+                                        const currentScaleY = activeObject.scaleY || 1;
+                                        activeObject.set('height', height / currentScaleY);
+                                        canvas?.requestRenderAll();
+                                        setForceUpdate(prev => prev + 1);
+                                    }
+                                }}
+                                className="w-full px-2 py-1 text-xs border border-border rounded bg-background"
+                                min="10"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Rotation Control */}
+                    <div>
+                        <label className="text-xs text-muted-foreground">Rotation</label>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="range"
+                                min="0"
+                                max="360"
+                                value={Math.round((activeObject.angle || 0) % 360)}
+                                onChange={(e) => {
+                                    const angle = parseInt(e.target.value);
+                                    activeObject.set('angle', angle);
+                                    canvas?.requestRenderAll();
+                                    setForceUpdate(prev => prev + 1);
+                                }}
+                                className="flex-1"
+                            />
+                            <span className="text-xs text-muted-foreground w-12 text-right">
+                                {Math.round((activeObject.angle || 0) % 360)}°
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Flip Controls */}
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => {
+                                const currentFlipX = activeObject.flipX || false;
+                                activeObject.set('flipX', !currentFlipX);
+                                canvas?.requestRenderAll();
+                                setForceUpdate(prev => prev + 1);
+                            }}
+                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1 text-xs border border-border rounded bg-background hover:bg-muted transition-colors"
+                        >
+                            <FlipHorizontal size={12} />
+                            Flip H
+                        </button>
+                        <button
+                            onClick={() => {
+                                const currentFlipY = activeObject.flipY || false;
+                                activeObject.set('flipY', !currentFlipY);
+                                canvas?.requestRenderAll();
+                                setForceUpdate(prev => prev + 1);
+                            }}
+                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1 text-xs border border-border rounded bg-background hover:bg-muted transition-colors"
+                        >
+                            <FlipVertical size={12} />
+                            Flip V
+                        </button>
+                    </div>
+
+                    {/* Opacity Control */}
+                    <div>
+                        <label className="text-xs text-muted-foreground">Opacity</label>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={Math.round((activeObject.opacity || 1) * 100)}
+                                onChange={(e) => {
+                                    const opacity = parseInt(e.target.value) / 100;
+                                    activeObject.set('opacity', opacity);
+                                    canvas?.requestRenderAll();
+                                    setForceUpdate(prev => prev + 1);
+                                }}
+                                className="flex-1"
+                            />
+                            <span className="text-xs text-muted-foreground w-8 text-right">
+                                {Math.round((activeObject.opacity || 1) * 100)}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Quick Actions Section */}
+            <div className="border-t border-border pt-4">
+                <h3 className="font-semibold text-xs uppercase text-muted-foreground mb-3">Quick Actions</h3>
+                <div className="grid grid-cols-2 gap-2">
+                    <button
+                        onClick={() => {
+                            if (activeObject && canvas) {
+                                // Center object on canvas
+                                const canvasWidth = canvas.getWidth();
+                                const canvasHeight = canvas.getHeight();
+                                activeObject.set({
+                                    left: canvasWidth / 2,
+                                    top: canvasHeight / 2,
+                                    originX: 'center',
+                                    originY: 'center'
+                                });
+                                canvas.requestRenderAll();
+                                setForceUpdate(prev => prev + 1);
+                            }
+                        }}
+                        className="flex items-center justify-center gap-1 px-2 py-1 text-xs border border-border rounded bg-background hover:bg-muted transition-colors"
+                    >
+                        <Maximize2 size={12} />
+                        Center
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (activeObject) {
+                                // Reset transform properties but preserve scale
+                                const currentScaleX = activeObject.scaleX || 1;
+                                const currentScaleY = activeObject.scaleY || 1;
+                                activeObject.set({
+                                    angle: 0,
+                                    flipX: false,
+                                    flipY: false,
+                                    opacity: 1,
+                                    scaleX: currentScaleX,
+                                    scaleY: currentScaleY
+                                });
+                                canvas?.requestRenderAll();
+                                setForceUpdate(prev => prev + 1);
+                            }
+                        }}
+                        className="flex items-center justify-center gap-1 px-2 py-1 text-xs border border-border rounded bg-background hover:bg-muted transition-colors"
+                    >
+                        <RotateCw size={12} />
+                        Reset
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (activeObject && canvas) {
+                                // Duplicate object using Fabric.js v6 clone method
+                                activeObject.clone().then((cloned: fabric.Object) => {
+                                    cloned.set({
+                                        left: (activeObject.left || 0) + 20,
+                                        top: (activeObject.top || 0) + 20
+                                    });
+                                    canvas.add(cloned);
+                                    canvas.setActiveObject(cloned);
+                                    canvas.requestRenderAll();
+                                    setForceUpdate(prev => prev + 1);
+                                }).catch((error) => {
+                                    console.error('Clone failed:', error);
+                                });
+                            }
+                        }}
+                        className="flex items-center justify-center gap-1 px-2 py-1 text-xs border border-border rounded bg-background hover:bg-muted transition-colors"
+                    >
+                        Copy
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (activeObject && canvas) {
+                                // Delete object
+                                canvas.remove(activeObject);
+                                canvas.discardActiveObject();
+                                canvas.requestRenderAll();
+                                setForceUpdate(prev => prev + 1);
+                            }
+                        }}
+                        className="flex items-center justify-center gap-1 px-2 py-1 text-xs border border-red-500 text-red-500 rounded bg-background hover:bg-red-50 transition-colors"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
 
             {/* Color Picker Section */}
             <div className="border-t border-border pt-4">

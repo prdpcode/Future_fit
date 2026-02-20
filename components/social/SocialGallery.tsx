@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Heart, ShoppingBag, User, Camera, Upload } from "lucide-react";
+import { uploadSocialImage, getSocialPosts } from "@/actions/social";
 
 interface SocialPost {
   id: string;
@@ -23,52 +24,180 @@ export default function SocialGallery() {
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadPreview, setUploadPreview] = useState<string>('');
+  const [isUploading, setIsUploading] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Mock social posts (in production, fetch from your API)
-  const mockPosts: SocialPost[] = [
-    {
-      id: "1",
-      username: "tech_style_influencer",
-      avatar: "/avatars/user1.jpg",
-      image: "/social/social1.webp",
-      caption: "Rocking the Future Fit oversized tee - perfect for my tech-noir aesthetic! 🚀",
-      likes: 234,
-      products: [
-        { id: "oversized-box-tee", name: "Oversized Box Tee", price: 1499 }
-      ],
-      timestamp: "2 hours ago"
-    },
-    {
-      id: "2",
-      username: "streetwear_fanatic",
-      avatar: "/avatars/user2.jpg",
-      image: "/social/social2.webp",
-      caption: "Complete the look with Future Fit hoodie and accessories ✨",
-      likes: 189,
-      products: [
-        { id: "oversized-hoodie", name: "Oversized Hoodie", price: 2999 },
-        { id: "premium-round-neck-tee", name: "Premium Round Neck Tee", price: 1299 }
-      ],
-      timestamp: "4 hours ago"
-    },
-    {
-      id: "3",
-      username: "minimalist_wear",
-      avatar: "/avatars/user3.jpg",
-      image: "/social/social3.webp",
-      caption: "Less is more with Future Fit's clean aesthetic 🖤",
-      likes: 156,
-      products: [
-        { id: "classic-round-neck-tee", name: "Classic Round Neck Tee", price: 999 }
-      ],
-      timestamp: "6 hours ago"
+  // File handling functions
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+      
+      setUploadedFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  ];
+  };
 
+  const handleUpload = async () => {
+    console.log('handleUpload called, uploadedFile:', uploadedFile);
+    if (!uploadedFile) {
+      console.log('No uploaded file, returning');
+      return;
+    }
+    
+    setIsUploading(true);
+    console.log('Starting real upload to Supabase...');
+    
+    try {
+      // Upload to Supabase storage and create post
+      const result = await uploadSocialImage(
+        uploadedFile,
+        "you", // In production, get from auth
+        "My Future Fit style! ✨"
+      );
+      
+      console.log('Upload successful:', result);
+      
+      // Create new post with Supabase data
+      const newPost: SocialPost = {
+        id: result.post.id,
+        username: result.post.username,
+        avatar: "/avatars/user-default.jpg",
+        image: result.imageUrl,
+        caption: result.post.caption,
+        likes: result.post.likes,
+        products: result.post.products || [],
+        timestamp: "Just now"
+      };
+      
+      console.log('Created new post from Supabase:', newPost);
+      
+      // Add to beginning of posts
+      setPosts(prev => {
+        console.log('Adding new post to existing posts:', prev.length);
+        return [newPost, ...prev];
+      });
+      
+      // Reset and close modal
+      setUploadedFile(null);
+      setUploadPreview('');
+      setShowUploadModal(false);
+      
+      console.log('Upload completed successfully!');
+      alert('Your style has been shared! 🎉');
+      
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('Upload failed. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Load posts from Supabase on mount
   useEffect(() => {
-    // Simulate initial load
-    setPosts(mockPosts.slice(0, visiblePosts));
+    const loadPosts = async () => {
+      try {
+        const postsFromDB = await getSocialPosts();
+        console.log('Loaded posts from Supabase:', postsFromDB);
+        
+        // If no posts in DB, show mock posts
+        if (postsFromDB.length === 0) {
+          const mockPosts: SocialPost[] = [
+            {
+              id: "1",
+              username: "tech_style_influencer",
+              avatar: "/avatars/user1.jpg",
+              image: "/social/social1.webp",
+              caption: "Rocking the Future Fit oversized tee - perfect for my tech-noir aesthetic! 🚀",
+              likes: 234,
+              products: [
+                { id: "oversized-box-tee", name: "Oversized Box Tee", price: 1499 }
+              ],
+              timestamp: "2 hours ago"
+            },
+            {
+              id: "2",
+              username: "streetwear_fanatic",
+              avatar: "/avatars/user2.jpg",
+              image: "/social/social2.webp",
+              caption: "Complete the look with Future Fit hoodie and accessories ✨",
+              likes: 189,
+              products: [
+                { id: "oversized-hoodie", name: "Oversized Hoodie", price: 2999 },
+                { id: "cyber-minimalist-cap", name: "Cyber-Minimalist Cap", price: 799 }
+              ],
+              timestamp: "5 hours ago"
+            },
+            {
+              id: "3",
+              username: "urban_explorer",
+              avatar: "/avatars/user3.jpg",
+              image: "/social/social3.webp",
+              caption: "Future Fit meets street style - the perfect fusion! �",
+              likes: 156,
+              products: [
+                { id: "cargo-pants", name: "Cargo Pants", price: 1999 },
+                { id: "high-tops", name: "High Tops", price: 2499 }
+              ],
+              timestamp: "1 day ago"
+            }
+          ];
+          setPosts(mockPosts);
+        } else {
+          // Convert Supabase posts to frontend format
+          const formattedPosts = postsFromDB.map(post => ({
+            id: post.id,
+            username: post.username,
+            avatar: `/avatars/user-default.jpg`, // In production, use user avatar
+            image: post.image_url,
+            caption: post.caption,
+            likes: post.likes,
+            products: post.products || [],
+            timestamp: new Date(post.created_at).toLocaleString()
+          }));
+          setPosts(formattedPosts);
+        }
+      } catch (error) {
+        console.error('Failed to load posts:', error);
+        // Fallback to mock posts
+        const mockPosts: SocialPost[] = [
+          {
+            id: "1",
+            username: "tech_style_influencer",
+            avatar: "/avatars/user1.jpg",
+            image: "/social/social1.webp",
+            caption: "Rocking the Future Fit oversized tee - perfect for my tech-noir aesthetic! 🚀",
+            likes: 234,
+            products: [
+              { id: "oversized-box-tee", name: "Oversized Box Tee", price: 1499 }
+            ],
+            timestamp: "2 hours ago"
+          }
+        ];
+        setPosts(mockPosts);
+      }
+    };
+
+    loadPosts();
   }, []);
 
   // Intersection Observer for infinite scroll
@@ -96,15 +225,28 @@ export default function SocialGallery() {
   }, [isLoading]);
 
   const loadMorePosts = async () => {
-    if (isLoading || posts.length >= mockPosts.length) return;
+    if (isLoading) return;
 
     setIsLoading(true);
     
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    const newPosts = mockPosts.slice(posts.length, posts.length + 3);
-    setPosts(prev => [...prev, ...newPosts]);
+    // For now, just add some mock posts if needed
+    const mockPosts: SocialPost[] = [
+      {
+        id: `mock-${Date.now()}`,
+        username: "future_fan",
+        avatar: "/avatars/user1.jpg",
+        image: "/social/social1.webp",
+        caption: "Loving the Future Fit aesthetic! ✨",
+        likes: 42,
+        products: [],
+        timestamp: "Just now"
+      }
+    ];
+    
+    setPosts(prev => [...prev, ...mockPosts]);
     setIsLoading(false);
   };
 
@@ -214,48 +356,70 @@ export default function SocialGallery() {
               </p>
               
               <div className="space-y-4">
-                <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
-                  <Upload className="mx-auto mb-2 text-muted-foreground" size={32} />
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    id="file-upload"
-                    onChange={(e) => {
-                      // Handle file upload
-                      console.log('File uploaded:', e.target.files?.[0]);
-                    }}
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="inline-block mt-2 px-4 py-2 bg-foreground text-background rounded-md text-sm font-medium cursor-pointer hover:opacity-90 transition-opacity"
-                  >
-                    Choose File
-                  </label>
-                </div>
+                {uploadPreview ? (
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <img 
+                        src={uploadPreview} 
+                        alt="Upload preview" 
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <button
+                        onClick={() => {
+                          setUploadedFile(null);
+                          setUploadPreview('');
+                        }}
+                        className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {uploadedFile?.name}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
+                    <Upload className="mx-auto mb-2 text-muted-foreground" size={32} />
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Click to upload or drag and drop
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      PNG, JPG, GIF up to 10MB
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="file-upload"
+                      onChange={handleFileSelect}
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="inline-block mt-2 px-4 py-2 bg-foreground text-background rounded-md text-sm font-medium cursor-pointer hover:opacity-90 transition-opacity"
+                    >
+                      Choose File
+                    </label>
+                  </div>
+                )}
                 
                 <div className="flex gap-3">
                   <button
-                    onClick={() => setShowUploadModal(false)}
+                    onClick={() => {
+                      setUploadedFile(null);
+                      setUploadPreview('');
+                      setShowUploadModal(false);
+                    }}
                     className="flex-1 px-4 py-2 border border-border rounded-md text-sm font-medium hover:bg-muted transition-colors"
                   >
                     Cancel
                   </button>
                   <button
-                    onClick={() => {
-                      // Handle submission
-                      alert('Feature coming soon! Thank you for sharing your style.');
-                      setShowUploadModal(false);
-                    }}
-                    className="flex-1 px-4 py-2 bg-foreground text-background rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+                    onClick={handleUpload}
+                    disabled={!uploadedFile || isUploading}
+                    className="flex-1 px-4 py-2 bg-foreground text-background rounded-md text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Share
+                    {isUploading ? 'Uploading...' : 'Share Style'}
                   </button>
                 </div>
               </div>
