@@ -7,6 +7,7 @@ import RootLayoutClient from "@/components/layout/RootLayoutClient";
 import ClientEffects from "@/components/layout/ClientEffects";
 import Clarity from "@/components/Clarity";
 import LazyFeatureLoader from "@/components/performance/LazyFeatureLoader";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import "@/lib/env-validation";
 
 const geistSans = Geist({
@@ -107,6 +108,11 @@ export default function RootLayout({
             }),
           }}
         />
+        <BreadcrumbSchema 
+        items={[
+          { name: "Home", url: "https://wearfuturefit.com/" }
+        ]}
+      />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

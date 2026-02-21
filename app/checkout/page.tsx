@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import { CheckCircle, ShoppingBag, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useCart } from "@/components/cart/CartContext";
 import { formatCurrency } from "@/lib/utils";
@@ -21,22 +22,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[6-9]\d{9}$/;
 const PINCODE_RE = /^\d{6}$/;
 
-// Load Razorpay script
-async function loadRazorpayScript(): Promise<boolean> {
-    return new Promise((resolve) => {
-        if (window.Razorpay) {
-            resolve(true);
-            return;
-        }
-
-        const script = document.createElement("script");
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
-        script.async = true;
-        script.onload = () => resolve(true);
-        script.onerror = () => resolve(false);
-        document.body.appendChild(script);
-    });
-}
+// Razorpay script is now loaded via Next.js Script component
 
 export default function CheckoutPage() {
     const { items, total, removeItem, updateQuantity } = useCart();
@@ -92,8 +78,12 @@ export default function CheckoutPage() {
         setLoading(true);
 
         try {
-            const loaded = await loadRazorpayScript();
-            if (!loaded) { setError("Failed to load payment gateway. Check your internet connection."); setLoading(false); return; }
+            // Check if Razorpay is available (loaded via Next.js Script component)
+            if (!window.Razorpay) { 
+                setError("Payment gateway is loading. Please wait a moment and try again."); 
+                setLoading(false); 
+                return; 
+            }
 
             const res = await fetch("/api/razorpay", {
                 method: "POST",
@@ -215,6 +205,7 @@ export default function CheckoutPage() {
     }
 
     return (
+        <>
         <div className="max-w-4xl mx-auto px-4 py-8 overflow-y-auto h-full">
             <Link href="/shop" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
                 <ArrowLeft size={16} /> Continue Shopping
@@ -343,5 +334,18 @@ export default function CheckoutPage() {
                 </div>
             </div>
         </div>
+        
+        {/* Razorpay Script */}
+        <Script 
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            strategy="afterInteractive"
+            onLoad={() => {
+                console.log('Razorpay script loaded successfully');
+            }}
+            onError={() => {
+                console.error('Failed to load Razorpay script');
+            }}
+        />
+        </>
     );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 export const metadata: Metadata = {
     title: "Shop — Oversized Tees, Round Neck Tees & Hoodies",
@@ -31,6 +32,13 @@ const PRODUCTS = [
 
 export default function ShopPage() {
     return (
+        <>
+        <BreadcrumbSchema 
+            items={[
+                { name: "Home", url: "https://wearfuturefit.com/" },
+                { name: "Shop", url: "https://wearfuturefit.com/shop" }
+            ]}
+        />
         <div>
             <div className="container mx-auto px-4 pt-12 pb-12">
                 <div className="mb-10">
@@ -69,5 +77,6 @@ export default function ShopPage() {
                 </div>
             </div>
         </div>
+        </>
     );
 }

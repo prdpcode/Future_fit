@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Sparkles, RotateCcw, Ruler, Weight, User, ChevronRight } from "lucide-react";
 import { type Gender, type BodyShape, type FitResult, recommendSize } from "@/lib/fit-finder";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -77,6 +78,13 @@ export default function FitFinderPage() {
     const progress = step === 4 ? 100 : ((step - 1) / 3) * 100;
 
     return (
+        <>
+        <BreadcrumbSchema 
+            items={[
+                { name: "Home", url: "https://wearfuturefit.com/" },
+                { name: "AI Fit Finder", url: "https://wearfuturefit.com/fit-finder" }
+            ]}
+        />
         <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
             <div className="w-full max-w-lg space-y-8">
                 {/* Header */}
@@ -271,5 +279,6 @@ export default function FitFinderPage() {
                 )}
             </div>
         </div>
+        </>
     );
 }
