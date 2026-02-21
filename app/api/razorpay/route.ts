@@ -35,31 +35,24 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    // Environment-based key selection
-    const isDevelopment = process.env.NODE_ENV === "development";
-    
-    const key_id = isDevelopment 
-        ? process.env.RAZORPAY_TEST_KEY_ID 
-        : process.env.RAZORPAY_LIVE_KEY_ID;
-        
-    const key_secret = isDevelopment 
-        ? process.env.RAZORPAY_TEST_KEY_SECRET 
-        : process.env.RAZORPAY_LIVE_KEY_SECRET;
+    // For now, use live keys for both development and production
+    // TODO: Switch to test keys when you get them from Razorpay dashboard
+    const key_id = process.env.RAZORPAY_LIVE_KEY_ID || process.env.RAZORPAY_KEY_ID;
+    const key_secret = process.env.RAZORPAY_LIVE_KEY_SECRET || process.env.RAZORPAY_KEY_SECRET;
 
     // Debug logging
     console.log("Environment check:", {
         environment: process.env.NODE_ENV,
-        key_type: isDevelopment ? "TEST" : "LIVE",
+        key_type: "LIVE",
         key_id: key_id ? "present" : "missing",
         key_secret: key_secret ? "present" : "missing",
         key_id_prefix: key_id?.substring(0, 8) || "missing"
     });
 
     if (!key_id || !key_secret) {
-        const keyType = isDevelopment ? "TEST" : "LIVE";
         return NextResponse.json(
             { 
-                error: `Razorpay ${keyType} keys not configured. Set RAZORPAY_${keyType}_KEY_ID and RAZORPAY_${keyType}_KEY_SECRET in .env.local.` 
+                error: "Razorpay keys not configured. Set RAZORPAY_LIVE_KEY_ID and RAZORPAY_LIVE_KEY_SECRET in .env.local." 
             },
             { status: 500 }
         );
