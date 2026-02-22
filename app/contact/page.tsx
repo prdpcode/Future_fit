@@ -30,7 +30,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                         <h3 className="font-bold mb-2">Email</h3>
-                        <a href="mailto:wearfuturefit@gmail.com" className="text-foreground hover:underline">wearfuturefit@gmail.com</a>
+                        <a href="mailto:hello@wearfuturefit.com" className="text-foreground hover:underline">hello@wearfuturefit.com</a>
                     </div>
                     <div>
                         <h3 className="font-bold mb-2">Support Hours</h3>
@@ -42,9 +42,7 @@ export default function ContactPage() {
                     <div>
                         <h3 className="font-bold mb-2">Business Address</h3>
                         <p className="text-muted-foreground">
-                            17/3, Kanayakumari Nilaya, 1st Floor,<br />
-                            2nd Cross Road, Nagarbhavi Stage 2,<br />
-                            Bengaluru, Bengaluru Urban,<br />
+                            Bengaluru,<br />
                             Karnataka – 560056, India
                         </p>
                     </div>

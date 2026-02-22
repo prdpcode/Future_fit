@@ -25,7 +25,7 @@ export default function RefundPolicyPage() {
                     </p>
                     <p className="mt-2">
                         To cancel, email us at{" "}
-                        <a href="mailto:wearfuturefit@gmail.com" className="text-foreground underline">wearfuturefit@gmail.com</a>{" "}
+                        <a href="mailto:hello@wearfuturefit.com" className="text-foreground underline">hello@wearfuturefit.com</a>{" "}
                         with your Payment ID.
                     </p>
                 </section>
@@ -40,7 +40,7 @@ export default function RefundPolicyPage() {
                     </ul>
                     <p className="mt-2">
                         To initiate a return, email{" "}
-                        <a href="mailto:wearfuturefit@gmail.com" className="text-foreground underline">wearfuturefit@gmail.com</a>{" "}
+                        <a href="mailto:hello@wearfuturefit.com" className="text-foreground underline">hello@wearfuturefit.com</a>{" "}
                         with your Payment ID and reason for return.
                     </p>
                 </section>

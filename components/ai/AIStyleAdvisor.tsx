@@ -39,7 +39,7 @@ export default function AIStyleAdvisor({
       {
         id: "oversized-box-tee",
         name: "Oversized Box Tee",
-        price: 1499,
+        price: 999,
         image: "https://images.unsplash.com/photo-1521572163464-5e8f35443e2b?w=400&h=400&fit=crop",
         reason: "Perfect for your streetwear aesthetic",
         matchScore: 95
@@ -47,7 +47,7 @@ export default function AIStyleAdvisor({
       {
         id: "premium-round-neck-tee",
         name: "Premium Round Neck Tee",
-        price: 1299,
+        price: 799,
         image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=400&fit=crop",
         reason: "Versatile base layer for any outfit",
         matchScore: 88
@@ -55,7 +55,7 @@ export default function AIStyleAdvisor({
       {
         id: "oversized-hoodie",
         name: "Oversized Hoodie",
-        price: 2999,
+        price: 1999,
         image: "https://images.unsplash.com/photo-1551698618-1d74eaae32f5?w=400&h=400&fit=crop",
         reason: "Complete your tech-noir look",
         matchScore: 92

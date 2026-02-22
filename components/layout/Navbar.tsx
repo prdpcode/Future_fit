@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, User, X } from "lucide-react";
+import { ShoppingBag, Menu, User, X, Instagram } from "lucide-react";
 import { useCart } from "@/components/cart/CartContext";
 import { useSyncExternalStore } from "react";
 import { useEffect, useState } from "react";
@@ -30,6 +30,7 @@ export default function Navbar() {
     const [isAuthed, setIsAuthed] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         let cleanup: (() => void) | undefined;
@@ -59,9 +60,23 @@ export default function Navbar() {
         return () => cleanup?.();
     }, []);
 
+    // Scroll detection for navbar styling
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 10);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <>
-            <nav className="fixed top-0 left-0 right-0 z-40 bg-background/60 backdrop-blur-xl border-b border-border/50 h-16 flex items-center px-4 md:px-8 justify-between transition-all duration-300">
+            <nav className={`fixed top-0 left-0 right-0 z-40 h-16 flex items-center px-4 md:px-8 justify-between transition-all duration-300 ${
+                isScrolled 
+                    ? 'bg-[#0a0a0a]/85 backdrop-blur-md border-b border-[#1a1a1a]' 
+                    : 'bg-background/60 backdrop-blur-xl border-b border-border/50'
+            }`}>
                 <div className="flex items-center gap-4 md:gap-8 min-w-0">
                     <Link href="/" className="font-black text-lg sm:text-xl tracking-tighter shrink-0">
                         F\F
@@ -74,6 +89,15 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                    <Link
+                        href="https://instagram.com/wearfuturefit"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hidden sm:flex items-center gap-2 p-2 hover:bg-muted rounded-full transition-colors"
+                        aria-label="Instagram"
+                    >
+                        <Instagram size={20} />
+                    </Link>
                     <Link
                         href={hasHydrated ? (isAuthed ? "/logout" : "/login") : "/login"}
                         className="flex items-center gap-2 p-2 hover:bg-muted rounded-full transition-colors"
@@ -129,7 +153,18 @@ export default function Navbar() {
                                 </Link>
                             ))}
                         </nav>
-                        <div className="p-4 border-t border-border">
+                        <div className="p-4 border-t border-border space-y-2">
+                            <Link
+                                href="https://instagram.com/wearfuturefit"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center gap-3 px-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                                aria-label="Instagram"
+                            >
+                                <Instagram size={18} />
+                                Instagram
+                            </Link>
                             <Link
                                 href={hasHydrated ? (isAuthed ? "/logout" : "/login") : "/login"}
                                 onClick={() => setMobileOpen(false)}

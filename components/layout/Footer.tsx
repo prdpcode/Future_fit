@@ -12,11 +12,11 @@ export default function Footer() {
                         <div className="mt-4 space-y-2 text-xs text-muted-foreground">
                             <p className="flex items-center gap-2">
                                 <Mail size={12} />
-                                <a href="mailto:wearfuturefit@gmail.com" className="hover:text-foreground transition-colors">wearfuturefit@gmail.com</a>
+                                <a href="mailto:hello@wearfuturefit.com" className="hover:text-foreground transition-colors">hello@wearfuturefit.com</a>
                             </p>
                             <p className="flex items-start gap-2">
                                 <MapPin size={12} className="mt-0.5 shrink-0" />
-                                <span>17/3, Kanayakumari Nilaya, Nagarbhavi Stage 2, Bengaluru, Karnataka 560056</span>
+                                <span>Bengaluru, Karnataka, India</span>
                             </p>
                             <p className="flex items-center gap-2">
                                 <Clock size={12} />
@@ -68,16 +68,13 @@ export default function Footer() {
                         </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-                        <p>&copy; {new Date().getFullYear()} Future Fit. All rights reserved.</p>
+                        <p>&copy; 2026 Future Fit. All rights reserved.</p>
                         <div className="flex items-center gap-4">
-                            <a href="https://www.instagram.com/wearfuturefit/" target="_blank" rel="me noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Instagram">
-                                <Instagram size={16} />
+                            <a href="https://instagram.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="text-[#888888] hover:text-white transition-colors duration-200" aria-label="Instagram">
+                                <Instagram size={20} />
                             </a>
-                            <a href="https://linkedin.com/company/future-fit" target="_blank" rel="me noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="LinkedIn">
-                                <Linkedin size={16} />
-                            </a>
-                            <a href="https://twitter.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="Twitter">
-                                <Twitter size={16} />
+                            <a href="https://twitter.com/wearfuturefit" target="_blank" rel="noopener noreferrer" className="text-[#888888] hover:text-white transition-colors duration-200" aria-label="Twitter">
+                                <Twitter size={20} />
                             </a>
                         </div>
                         <p>GSTIN: 29ANDPH4834K1ZR | Legal Entity: Future Fit</p>

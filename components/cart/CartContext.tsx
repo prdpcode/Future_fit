@@ -5,7 +5,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 export interface CartItem {
     id: string;
     name: string;
-    price: number;
+    price: number; // sale price
+    mrp?: number; // maximum retail price
     image: string;
     customized?: boolean;
     size?: string;

@@ -38,8 +38,9 @@ export default function CollectionsPage() {
                                 src={collection.image}
                                 alt={collection.alt}
                                 fill
-                                sizes="(max-width: 768px) 100vw, 33vw"
+                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                                 priority
+                                quality={85}
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-colors group-hover:from-black/80" />

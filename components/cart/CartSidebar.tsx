@@ -3,6 +3,8 @@
 import { useCart } from "./CartContext";
 import { X, ShoppingBag } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { formatPrice, getDiscountPercentage, isOnDiscount } from "@/lib/pricing";
+import { getProductById } from "@/lib/productUtils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -41,11 +43,21 @@ export default function CartSidebar() {
                             <p>Your bag is empty.</p>
                         </div>
                     ) : (
-                        items.map((item) => (
-                            <div key={item.id} className="flex gap-4 p-4 border border-border rounded-lg bg-card">
-                                <div className="w-20 h-20 bg-muted rounded-md relative overflow-hidden shrink-0">
-                                    <Image src={item.image} alt={item.name} fill sizes="80px" className="object-cover" />
-                                </div>
+                        items.map((item) => {
+                            const product = getProductById(item.slug);
+                            const imageUrl = product?.heroImage || '';
+                            
+                            return (
+                                <div key={item.id} className="flex gap-4 p-4 border border-border rounded-lg bg-card">
+                                    <div className="w-20 h-20 bg-muted rounded-md relative overflow-hidden shrink-0">
+                                        {imageUrl ? (
+                                            <Image src={imageUrl} alt={item.name} fill sizes="80px" className="object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full bg-muted flex items-center justify-center">
+                                                <ShoppingBag size={24} className="text-muted-foreground" />
+                                            </div>
+                                        )}
+                                    </div>
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div>
                                         <h4 className="font-medium line-clamp-1">{item.name}</h4>
@@ -55,7 +67,17 @@ export default function CartSidebar() {
                                         {item.customized && <span className="text-xs text-blue-500 font-medium">Customized</span>}
                                     </div>
                                     <div className="flex items-center justify-between mt-2">
-                                        <span className="font-semibold">{formatCurrency(item.price)}</span>
+                                        <div className="text-right">
+                                            {isOnDiscount(item.mrp || 0, item.price) && (
+                                                <div className="flex items-center gap-1">
+                                                    <span className="text-xs text-muted-foreground line-through">{formatPrice(item.mrp || 0)}</span>
+                                                    <span className="text-xs bg-red-500 text-white px-1 py-0.5 rounded">
+                                                        -{getDiscountPercentage(item.mrp || 0, item.price)}%
+                                                    </span>
+                                                </div>
+                                            )}
+                                            <span className="font-semibold">{formatPrice(item.price)}</span>
+                                        </div>
                                         <button
                                             onClick={() => removeItem(item.id)}
                                             className="text-xs text-destructive hover:underline"
@@ -64,15 +86,16 @@ export default function CartSidebar() {
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                                </div>
+                            );
+                        })
                     )}
                 </div>
 
                 <div className="pt-6 border-t border-border mt-4">
                     <div className="flex items-center justify-between mb-4 text-lg font-bold">
                         <span>Total</span>
-                        <span>{formatCurrency(total)}</span>
+                        <span>{formatPrice(total)}</span>
                     </div>
                     <Link
                         href="/checkout"

@@ -18,10 +18,10 @@ const QUICK_REPLIES = [
 ];
 
 const BOT_RESPONSES: Record<string, string> = {
-    "track my order": "To track your order, please share your Payment ID or registered phone number. Our team will get back to you within 24 hours at wearfuturefit@gmail.com.",
+    "track my order": "To track your order, please share your Payment ID or registered phone number. Our team will get back to you within 24 hours at hello@wearfuturefit.com.",
     "size guide": "We offer Oversized Tees, Round Neck Tees, and Hoodies in sizes S, M, L, and XL. Try our AI Fit Finder from the menu to discover your perfect size in seconds!",
-    "return policy": "We offer 7-day easy returns on all unworn items with tags intact. Email wearfuturefit@gmail.com to initiate a return.",
-    "talk to support": "You can reach us at wearfuturefit@gmail.com or call +91 (555) 123-4567. We respond within 24 hours!",
+    "return policy": "We offer 7-day easy returns on all unworn items with tags intact. Email hello@wearfuturefit.com to initiate a return.",
+    "talk to support": "You can reach us at hello@wearfuturefit.com or call +91 (555) 123-4567. We respond within 24 hours!",
 };
 
 function getTimestamp(): string {
@@ -33,7 +33,7 @@ function getBotReply(text: string): string {
     for (const [key, value] of Object.entries(BOT_RESPONSES)) {
         if (lower.includes(key)) return value;
     }
-    return "Thanks for reaching out! For specific queries, email us at wearfuturefit@gmail.com or try one of the quick options above. We typically respond within 24 hours.";
+    return "Thanks for reaching out! For specific queries, email us at hello@wearfuturefit.com or try one of the quick options above. We typically respond within 24 hours.";
 }
 
 export default function ChatBox() {

@@ -27,7 +27,7 @@ export default function CareersPage() {
             </p>
             <p className="text-sm text-muted-foreground mb-8">
                 Interested? Reach out at{" "}
-                <a href="mailto:wearfuturefit@gmail.com" className="text-foreground underline">wearfuturefit@gmail.com</a>
+                <a href="mailto:hello@wearfuturefit.com" className="text-foreground underline">hello@wearfuturefit.com</a>
             </p>
             <Link
                 href="/"

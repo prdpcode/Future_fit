@@ -15,6 +15,7 @@ interface SocialPost {
     id: string;
     name: string;
     price: number;
+    mrp?: number;
   }>;
   timestamp: string;
 }
@@ -130,7 +131,7 @@ export default function SocialGallery() {
               caption: "Rocking the Future Fit oversized tee - perfect for my tech-noir aesthetic! 🚀",
               likes: 234,
               products: [
-                { id: "oversized-box-tee", name: "Oversized Box Tee", price: 1499 }
+                { id: "oversized-box-tee", name: "Oversized Box Tee", price: 999, mrp: 1299 }
               ],
               timestamp: "2 hours ago"
             },
@@ -142,8 +143,8 @@ export default function SocialGallery() {
               caption: "Complete the look with Future Fit hoodie and accessories ✨",
               likes: 189,
               products: [
-                { id: "oversized-hoodie", name: "Oversized Hoodie", price: 2999 },
-                { id: "cyber-minimalist-cap", name: "Cyber-Minimalist Cap", price: 799 }
+                { id: "oversized-hoodie", name: "Oversized Hoodie", price: 1999, mrp: 2499 },
+                { id: "cyber-minimalist-cap", name: "Cyber-Minimalist Cap", price: 799, mrp: 899 }
               ],
               timestamp: "5 hours ago"
             },
@@ -155,8 +156,8 @@ export default function SocialGallery() {
               caption: "Future Fit meets street style - the perfect fusion! �",
               likes: 156,
               products: [
-                { id: "cargo-pants", name: "Cargo Pants", price: 1999 },
-                { id: "high-tops", name: "High Tops", price: 2499 }
+                { id: "cargo-pants", name: "Cargo Pants", price: 1999, mrp: 2499 },
+                { id: "high-tops", name: "High Tops", price: 2499, mrp: 2999 }
               ],
               timestamp: "1 day ago"
             }

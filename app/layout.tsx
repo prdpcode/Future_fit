@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     title: "Future Fit | AI-Powered Streetwear & Futuristic Fashion",
     description:
       "Discover Future Fit, India's premier AI-driven streetwear brand. Shop oversized tees, hoodies & tech-fleece apparel.",
+    site: "@wearfuturefit",
   },
   robots: {
     index: true,

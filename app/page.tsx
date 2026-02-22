@@ -1,98 +1,82 @@
-import Link from "next/link";
-import { ArrowRight, Sparkles, Users, Trophy, Leaf } from "lucide-react";
 import JSONLD from "@/components/JSONLD";
-import LazyFeatureLoader from "@/components/performance/LazyFeatureLoader";
+import CountdownTimerWrapper from "@/components/homepage/CountdownTimerWrapper";
+import WaitlistForm from "@/components/homepage/WaitlistForm";
+import FeatureCards from "@/components/homepage/FeatureCards";
+import FounderStory from "@/components/homepage/FounderStory";
+import FabricSpecs from "@/components/homepage/FabricSpecs";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Future Fit | Heavyweight Streetwear India — 240 GSM Drop Shoulder Tees",
+  description: "Premium 240 GSM oversized tees and 320 GSM hoodies. Bio-washed, pre-shrunk, zero shrinkage. India's heavyweight streetwear brand. Drop 01 launching 2026.",
+  openGraph: {
+    title: "Future Fit | Heavyweight Streetwear India — 240 GSM Drop Shoulder Tees",
+    description: "Premium 240 GSM oversized tees and 320 GSM hoodies. Bio-washed, pre-shrunk, zero shrinkage. India's heavyweight streetwear brand. Drop 01 launching 2026.",
+    type: "website",
+    siteName: "Future Fit",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Future Fit | Heavyweight Streetwear India — 240 GSM Drop Shoulder Tees",
+    description: "Premium 240 GSM oversized tees and 320 GSM hoodies. Bio-washed, pre-shrunk, zero shrinkage. India's heavyweight streetwear brand. Drop 01 launching 2026.",
+    site: "@wearfuturefit",
+  },
+};
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Hero Section */}
-      <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center relative overflow-hidden">
+      <div className="flex min-h-screen flex-col items-center justify-center relative overflow-hidden px-4">
         <JSONLD />
 
         {/* Ambient glow orbs */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-foreground/[0.03] rounded-full blur-[120px] animate-glow pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-foreground/[0.04] rounded-full blur-[100px] animate-glow pointer-events-none" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/[0.02] rounded-full blur-[120px] animate-glow pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-white/[0.03] rounded-full blur-[100px] animate-glow pointer-events-none" style={{ animationDelay: "2s" }} />
 
-        <div className="flex flex-col items-center gap-6 text-center px-4 relative z-10">
-          <p className="text-xs md:text-sm font-mono uppercase tracking-[0.3em] text-muted-foreground animate-in fade-in duration-1000">
-            AI-Powered Streetwear
-          </p>
-
-          <h1 className="text-7xl md:text-9xl font-black tracking-tighter text-shimmer animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            FUTURE FIT
+        <div className="flex flex-col items-center gap-8 text-center relative z-10 max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter animate-in fade-in duration-1000">
+            Heavyweight Streetwear. Built Different.
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 leading-relaxed">
-            Weightless design for the next generation.
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 leading-relaxed">
+            240 GSM. Bio-Washed. Drop Shoulder. Built by a frontend developer who got tired of streetwear brands shipping bad product — thin fabric, wrong cuts, shrinks in one wash.
           </p>
 
-          <div className="mt-4 animate-in fade-in zoom-in duration-1000 delay-500">
-            <Link
-              href="/shop"
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-foreground text-background rounded-full font-bold text-base hover:scale-105 hover:shadow-soft-lg transition-all duration-300 shadow-soft"
-            >
-              Explore Collection
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-            </Link>
+          {/* Countdown Timer */}
+          <div className="w-full animate-in fade-in duration-1000 delay-300">
+            <CountdownTimerWrapper />
           </div>
 
-          <div className="mt-12 flex items-center gap-8 text-xs text-muted-foreground animate-in fade-in duration-1000 delay-700">
-            <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-              Free Shipping
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-              AI Fit Finder
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-              Premium Quality
-            </span>
+          {/* Email Capture Form */}
+          <div className="w-full animate-in fade-in duration-1000 delay-500">
+            <WaitlistForm />
           </div>
         </div>
       </div>
 
-      {/* Features Preview */}
-      <div className="py-12 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-3">Experience the Future</h2>
-            <p className="text-muted-foreground text-sm">AI-driven features that enhance your shopping journey</p>
-          </div>
-          
-          <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
-            <div className="text-center p-4 rounded-lg bg-background hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="text-primary" size={24} />
-              </div>
-              <h3 className="font-semibold mb-2">AI Style Advisor</h3>
-              <p className="text-sm text-muted-foreground">Personalized recommendations powered by AI</p>
-            </div>
-            
-            <div className="text-center p-4 rounded-lg bg-background hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Users className="text-primary" size={24} />
-              </div>
-              <h3 className="font-semibold mb-2">Social Shopping</h3>
-              <p className="text-sm text-muted-foreground">See how others style Future Fit</p>
-            </div>
-            
-            <div className="text-center p-4 rounded-lg bg-background hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Trophy className="text-primary" size={24} />
-              </div>
-              <h3 className="font-semibold mb-2">Rewards System</h3>
-              <p className="text-sm text-muted-foreground">Earn points and unlock achievements</p>
-            </div>
-          </div>
+      {/* Section A - Why Future Fit is Different */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Why Future Fit is Different</h2>
+          <FeatureCards />
         </div>
-      </div>
+      </section>
 
-      {/* Lazy Loaded Features */}
-      <LazyFeatureLoader feature="social-gallery" />
-      <LazyFeatureLoader feature="rewards" />
+      {/* Section B - The Founder's Journey */}
+      <section className="py-20 px-4 bg-[#111111]">
+        <div className="max-w-6xl mx-auto">
+          <FounderStory />
+        </div>
+      </section>
+
+      {/* Section C - Fabric Specs Bar */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h3 className="text-xl font-bold text-center mb-8">Technical Specifications</h3>
+          <FabricSpecs />
+        </div>
+      </section>
     </div>
   );
 }

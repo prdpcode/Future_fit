@@ -14,13 +14,11 @@ const organizationSchema = {
     },
     description:
         "India's premier AI-driven streetwear brand. Oversized tees, hoodies, and tech-fleece apparel designed with AI precision.",
-    email: "wearfuturefit@gmail.com",
+    email: "hello@wearfuturefit.com",
     address: {
         "@type": "PostalAddress",
-        streetAddress: "17/3, Kanayakumari Nilaya, Nagarbhavi Stage 2",
         addressLocality: "Bengaluru",
         addressRegion: "Karnataka",
-        postalCode: "560056",
         addressCountry: "IN",
     },
     sameAs: [

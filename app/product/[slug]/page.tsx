@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { formatCurrency } from "@/lib/utils";
+import { formatPrice, getDiscountPercentage, isOnDiscount } from "@/lib/pricing";
 import { PRODUCTS } from "@/lib/products";
-import ProductGallery from "@/components/product/ProductGallery";
-import ProductActions from "@/components/product/ProductActions";
+import ProductPageClient from "@/components/product/ProductPageClient";
 
 export async function generateMetadata({
     params,
@@ -14,19 +14,19 @@ export async function generateMetadata({
     if (!product) return { title: "Product Not Found" };
 
     return {
-        title: `${product.name} — ₹${product.price}`,
+        title: `${product.name} — ${formatPrice(product.price)}`,
         description: product.description,
         openGraph: {
             title: `${product.name} — Future Fit`,
             description: product.description,
-            images: [{ url: product.image, width: 800, height: 800, alt: product.name }],
+            images: [{ url: product.heroImage, width: 800, height: 800, alt: product.name }],
             type: "website",
         },
         twitter: {
             card: "summary_large_image",
             title: product.name,
             description: product.description,
-            images: [product.image],
+            images: [product.heroImage],
         },
     };
 }
@@ -45,7 +45,7 @@ export default async function ProductPage({
         "@context": "https://schema.org",
         "@type": "Product",
         name: product.name,
-        image: product.image,
+        image: product.heroImage,
         description: product.description,
         offers: {
             "@type": "Offer",
@@ -62,35 +62,7 @@ export default async function ProductPage({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="flex items-center min-h-[calc(100vh-4rem)]">
-            <div className="container mx-auto px-4 py-8 lg:py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                    {/* Gallery */}
-                    <div className="animate-fade-up">
-                        <ProductGallery
-                            image={product.image}
-                            name={product.name}
-                            model={product.model}
-                        />
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex flex-col justify-start space-y-6 pt-4 lg:pt-0 animate-fade-up" style={{ animationDelay: "150ms" }}>
-                        <div>
-                            <p className="text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground mb-3">Future Fit</p>
-                            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter mb-3">{product.name}</h1>
-                            <p className="text-2xl font-bold">{formatCurrency(product.price)}</p>
-                        </div>
-
-                        <p className="text-muted-foreground leading-relaxed text-base lg:text-lg">
-                            {product.description}
-                        </p>
-
-                        <ProductActions product={product} />
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ProductPageClient product={product} />
         </>
     );
 }

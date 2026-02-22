@@ -8,7 +8,7 @@ import { useCart } from "@/components/cart/CartContext";
 import { formatCurrency } from "@/lib/utils";
 import { updateStockAfterPurchase } from "@/lib/actions/inventory";
 import { SecurityValidator } from "@/lib/security";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 declare global {
     interface Window {
@@ -31,6 +31,12 @@ export default function CheckoutPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [touched, setTouched] = useState<Record<string, boolean>>({});
+    const [isClient, setIsClient] = useState(false);
+
+    // Fix hydration mismatch
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -94,7 +100,7 @@ export default function CheckoutPage() {
 
             if (!res.ok) {
                 if (data.error?.includes("not configured")) {
-                    setError("Payment gateway is being set up. Please try again later or contact wearfuturefit@gmail.com.");
+                    setError("Payment gateway is being set up. Please try again later or contact hello@wearfuturefit.com.");
                 } else {
                     setError(data.error || "Failed to create order. Please try again.");
                 }
@@ -193,7 +199,7 @@ export default function CheckoutPage() {
         );
     }
 
-    if (items.length === 0 && state === "form") {
+    if (!isClient || (items.length === 0 && state === "form")) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
                 <ShoppingBag size={48} className="text-muted-foreground mb-4" />
@@ -269,7 +275,7 @@ export default function CheckoutPage() {
                         {items.map((item) => (
                             <div key={item.id} className="flex gap-3 p-3 border border-border rounded-lg bg-card">
                                 <div className="w-14 h-14 bg-muted rounded-md relative overflow-hidden shrink-0">
-                                    <Image src={item.image} alt={item.name} fill sizes="56px" className="object-cover" />
+                                    <Image src={item.image} alt={item.name} fill sizes="56px" quality={75} loading="lazy" className="object-cover" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium line-clamp-1">{item.name}</p>
