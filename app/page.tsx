@@ -4,21 +4,23 @@ import WaitlistForm from "@/components/homepage/WaitlistForm";
 import FeatureCards from "@/components/homepage/FeatureCards";
 import FounderStory from "@/components/homepage/FounderStory";
 import FabricSpecs from "@/components/homepage/FabricSpecs";
+import FabricManifesto from "@/components/homepage/FabricManifesto";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Future Fit | Heavyweight Streetwear India — 240 GSM Drop Shoulder Tees",
-  description: "Premium 240 GSM oversized tees and 320 GSM hoodies. Bio-washed, pre-shrunk, zero shrinkage. India's heavyweight streetwear brand. Drop 01 launching 2026.",
+  title: "Future Fit | Heavyweight Streetwear India",
+  description: "Experience India's premier heavyweight streetwear. Shop 240 GSM oversized tees and 320 GSM hoodies with our built-in AI Fit Finder for the perfect boxy fit.",
+  keywords: "heavyweight streetwear India, 240 GSM oversized tee, boxy fit t-shirts, premium streetwear Bangalore, AI size finder",
   openGraph: {
-    title: "Future Fit | Heavyweight Streetwear India — 240 GSM Drop Shoulder Tees",
-    description: "Premium 240 GSM oversized tees and 320 GSM hoodies. Bio-washed, pre-shrunk, zero shrinkage. India's heavyweight streetwear brand. Drop 01 launching 2026.",
+    title: "Future Fit | Heavyweight Streetwear India",
+    description: "Experience India's premier heavyweight streetwear. Shop 240 GSM oversized tees and 320 GSM hoodies with our built-in AI Fit Finder for the perfect boxy fit.",
     type: "website",
     siteName: "Future Fit",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Future Fit | Heavyweight Streetwear India — 240 GSM Drop Shoulder Tees",
-    description: "Premium 240 GSM oversized tees and 320 GSM hoodies. Bio-washed, pre-shrunk, zero shrinkage. India's heavyweight streetwear brand. Drop 01 launching 2026.",
+    title: "Future Fit | Heavyweight Streetwear India",
+    description: "Experience India's premier heavyweight streetwear. Shop 240 GSM oversized tees and 320 GSM hoodies with our built-in AI Fit Finder for the perfect boxy fit.",
     site: "@wearfuturefit",
   },
 };
@@ -36,7 +38,7 @@ export default function Home() {
 
         <div className="flex flex-col items-center gap-8 text-center relative z-10 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter animate-in fade-in duration-1000">
-            Heavyweight Streetwear. Built Different.
+            Premium Heavyweight Streetwear India | Future Fit
           </h1>
 
           <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 leading-relaxed">
@@ -54,6 +56,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Fabric Manifesto Section */}
+      <FabricManifesto />
 
       {/* Section A - Why Future Fit is Different */}
       <section className="py-20 px-4">

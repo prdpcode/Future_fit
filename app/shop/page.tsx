@@ -32,6 +32,7 @@ const SHOP_PRODUCTS = Object.values(PRODUCTS).map(product => ({
     price: product.price,
     mrp: product.mrp,
     image: product.heroImage,
+    alt: `${product.name} - Heavyweight Streetwear India - 240 GSM`,
     slug: product.slug,
     category: product.category,
     categoryLabel: product.category === 'oversized-tee' ? 'Oversized Tees' : 
@@ -65,7 +66,7 @@ export default function ShopPage() {
                             <div className="aspect-[4/5] relative bg-secondary rounded-lg overflow-hidden mb-2 shadow-soft group-hover:shadow-soft-lg transition-all duration-500 group-hover:-translate-y-1">
                                 <Image
                                     src={product.image}
-                                    alt={product.name}
+                                    alt={product.alt}
                                     fill
                                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                                     quality={85}
