@@ -45,13 +45,14 @@ export default function ProductActions({ product }: { product: Product }) {
             customized: false, 
             size: selectedSize,
             slug: product.slug,
+            image: product.heroImage,
             quantity: 1
         });
     };
 
     const handleCustomize = () => {
         const query = new URLSearchParams({
-            bg: product.image,
+            bg: product.heroImage,
             id: product.id,
         }).toString();
         router.push(`/studio?${query}`);

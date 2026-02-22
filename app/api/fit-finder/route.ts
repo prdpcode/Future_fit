@@ -35,7 +35,7 @@ function calculateSizeLocally(height: number, weight: number, chest?: number, fi
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
   const size = sizes[sizeIndex];
 
-  const explanations = {
+  const explanations: Record<string, string> = {
     XS: "Based on your measurements, XS will give you the best silhouette. Our boxy cut means even XS has a relaxed, oversized feel — not tight.",
     S: "S is your sweet spot. The drop-shoulder cut adds width naturally, so you'll get that oversized look without being swamped in fabric.",
     M: "M is our most popular size. The 240 GSM fabric has enough structure to hold the boxy shape perfectly at this size.",
@@ -52,9 +52,19 @@ function calculateSizeLocally(height: number, weight: number, chest?: number, fi
 }
 
 export async function POST(request: NextRequest) {
+  let height: number = 0;
+  let weight: number = 0;
+  let chest: number | undefined;
+  let shoulder: number | undefined;
+  let fitPreference: string = "";
+  
   try {
-    const { height, weight, chest, shoulder, fitPreference } = 
-      await request.json();
+    const body = await request.json();
+    height = Number(body.height);
+    weight = Number(body.weight);
+    chest = body.chest ? Number(body.chest) : undefined;
+    shoulder = body.shoulder ? Number(body.shoulder) : undefined;
+    fitPreference = body.fitPreference;
 
     if (!height || !weight || !fitPreference) {
       return NextResponse.json(

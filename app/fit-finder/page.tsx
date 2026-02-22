@@ -84,7 +84,7 @@ export default function FitFinderPage() {
   };
 
   const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) setStep((step - 1) as Step);
   };
 
   const handleReset = () => {
